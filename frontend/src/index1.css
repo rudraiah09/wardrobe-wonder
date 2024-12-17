@@ -1,84 +1,81 @@
 /* Main container styling */
 .indexpage-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background: url('../public/backgroundimage.jpg') no-repeat center center/cover;
-   overflow: hidden;
-    font-family: 'Roboto', sans-serif;
-    color: #fff;
-  }
-  
-  /* Title styling */
-  .indexpage-title h1 {
-    font-size: 4.5rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 5px;
-    animation: slideIn 2s ease-in-out;
-    text-align: center;
-    margin-bottom: 30px;
-    background: linear-gradient(90deg, #fff, #f3c623);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: url('../public/backgroundimage.jpg') no-repeat center center/cover;
+  overflow: hidden;
+  font-family: 'Roboto', sans-serif;
+  color: #FF204E;
+}
 
-  }
-  
-  /* Styling the links container */
-  .indexpage-links {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    padding: 10px;
-  }
-  
-  /* Individual link styling */
-  .indexpage-link {
-    font-size: 1.4rem;
-    font-weight: 600;
-    text-decoration: none;
-    color: #f3c623;
-    padding: 12px 30px;
-    border-radius: 30px;
-    background-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease-in-out;
-    text-transform: uppercase;
-  }
-  
-  .indexpage-link:hover {
-    color: #fff;
-    background-color: #f3c623;
-    transform: scale(1.05);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
-  }
-  
-  /* Keyframe animation for title */
-  @keyframes slideIn {
-    0% {
+/* Title styling */
+.indexpage-title h1 {
+  font-size: 4.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  animation: slideIn 2s ease-in-out;
+  text-align: center;
+  margin-bottom: 30px;
+  background: linear-gradient(90deg, #FF204E, #5D0E41);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Styling the links container */
+.indexpage-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 10px;
+}
+
+/* Individual link styling */
+.indexpage-link {
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: #FF204E;
+  padding: 12px 30px;
+  border-radius: 30px;
+  background-color: rgba(160, 21, 62, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+  text-transform: uppercase;
+}
+
+.indexpage-link:hover {
+  color: #00224D;
+  background-color: #A0153E;
+  transform: scale(1.05);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Keyframe animation for title */
+@keyframes slideIn {
+  0% {
       transform: translateY(-100px);
       opacity: 0;
-    }
-    100% {
+  }
+  100% {
       transform: translateY(0);
       opacity: 1;
-    }
   }
-  
-  /* Media query for responsive design */
-  @media (max-width: 768px) {
-    .indexpage-title h1 {
+}
+
+/* Media query for responsive design */
+@media (max-width: 768px) {
+  .indexpage-title h1 {
       font-size: 3rem;
-    }
-  
-    .indexpage-link {
+  }
+
+  .indexpage-link {
       font-size: 1.1rem;
       padding: 10px 25px;
-    }
   }
-  
+}
