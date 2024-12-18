@@ -1,0 +1,138 @@
+/* Apply styles to only the buyer login page */
+.buyer-login-page {
+    background-color: #393E46; 
+    height: 100vh; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    margin: 0; 
+}
+  
+.buyer-login-brand-container {
+    margin-left: 5%; /* Space from the left */
+    color: #FFD369;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    animation: buyer-login-slideIn 2s ease-in-out;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+  
+/* Keyframe animation for sliding text */
+@keyframes buyer-login-slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-50%);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+}
+  
+.buyer-login-container {
+    background-color: #222831; /* Dark background */
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    width: 500px;
+    margin-right: 5%; /* Space from the right */
+    color: #EEEEEE; /* Light text color */
+}
+  
+.buyer-login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+  
+.buyer-login-title {
+    margin-bottom: 1.5rem;
+    color: #FFD369; /* Highlighted text color */
+    font-size: 1.8rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+  
+.buyer-login-input {
+    width: 100%;
+    max-width: 300px;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border: 1px solid #393E46; /* Neutral border color */
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #393E46; /* Slightly lighter background for inputs */
+    color: #EEEEEE; /* Light text for inputs */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+  
+.buyer-login-input:focus {
+    outline: none;
+    border-color: #FFD369; /* Highlighted border on focus */
+    box-shadow: 0 0 5px rgba(255, 211, 105, 0.8);
+}
+  
+.buyer-login-button {
+    background-color: #FFD369; /* Primary button color */
+    color: #222831; /* Contrast text for button */
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+  
+.buyer-login-button:hover {
+    background-color: #EEEEEE; /* Lighter hover color */
+    color: #222831; /* Text contrast */
+    transform: scale(1.05); /* Subtle zoom effect */
+}
+  
+.buyer-login-button:active {
+    transform: scale(1); /* Reset zoom effect on click */
+    background-color: #FFD369;
+}
+  
+.buyer-login-container,
+.buyer-login-title,
+.buyer-login-input,
+.buyer-login-button {
+    animation: buyer-login-fadeIn 1s ease-in-out;
+}
+  
+.buyer-login-error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+  
+@keyframes buyer-login-fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+}
+.buyer-login-signup-link {
+    color: #EEEEEE;
+    font-size: 1rem;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.buyer-login-signup-link a {
+    color: #FFD369; /* Sign-up link color */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.buyer-login-signup-link a:hover {
+    color: #222831; /* Darker hover color for the link */
+}
