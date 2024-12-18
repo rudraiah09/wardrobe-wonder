@@ -13,14 +13,14 @@ async function handleloginseller(req,res) {
         return res.status(400).json({message:'invalid password please enter correct password'});
     }
     const token = jwt.sign(
-        { email: isuser.email, username: isuser.username }, 
+        { email: isuser.email, username: isuser.username ,shopname:isuser.shopname }, 
         secret, 
         { expiresIn: '1h' }
     );
     
     
     res.cookie('authToken', token, { 
-        httpOnly: true, 
+        httpOnly: false, 
         secure: true,  
         sameSite: 'Lax'
     });

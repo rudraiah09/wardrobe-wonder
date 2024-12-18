@@ -1,0 +1,67 @@
+
+.sellernavbar-container {
+    width: 250px;
+    height: 95vh;
+    background-color: #222831;
+    color: #eeeeee;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 0;
+    overflow-y: hidden;
+  }
+  
+
+  .sellernavbar-header {
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 100px;
+    border-bottom: 1px solid #393e46;
+  }
+  
+  .sellernavbar-seller-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+    color: #ffd369;
+  }
+  
+  
+  .sellernavbar-links {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    flex-grow: 1;
+    
+  }
+  
+  .sellernavbar-link {
+    display: block;
+    padding: 15px 20px;
+    color: #eeeeee;
+    margin-bottom: 10px;
+    text-decoration: none;
+    font-size: 1.5rem;
+    border-left: 4px solid transparent;
+    transition: all 0.3s;
+  }
+  
+  .sellernavbardiv:hover {
+    background-color: #393e46;
+    color: #ffd369;
+    border-left: 4px solid #ffd369;
+  }
+  
+  .sellernavbar-footer {
+    text-align: center;
+    padding: 10px;
+    border-top: 1px solid #393e46;
+  }
+  
+  .sellernavbar-shop-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0;
+    color: #ffd369;
+  }
+  

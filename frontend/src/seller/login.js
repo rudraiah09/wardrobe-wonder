@@ -18,7 +18,7 @@ function Login() {
         password: password
       }, { withCredentials: true });
 
-      navigate('/home');
+      navigate('/sellerhome');
     } catch (error) {
       if (error.response && error.response.data.message) {
         setErrorMessage(error.response.data.message);
