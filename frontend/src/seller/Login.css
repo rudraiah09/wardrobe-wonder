@@ -103,6 +103,12 @@
   .login-button {
     animation: fadeIn 1s ease-in-out;
   }
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+  }
   
   @keyframes fadeIn {
     from {

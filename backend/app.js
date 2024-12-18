@@ -10,7 +10,7 @@ app.use(cors({
     origin:'http://localhost:3000',
     credentials:true
 }))
-connectMongoDb('mongodb://localhost:27017/auth').then(()=>{console.log("mongodb connected successfully")}).catch((err)=>{console.log(err)});
+connectMongoDb('mongodb://localhost:27017/wardrobe-wonder').then(()=>{console.log("mongodb connected successfully")}).catch((err)=>{console.log(err)});
 app.use(cookieParser());
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: false })); 
