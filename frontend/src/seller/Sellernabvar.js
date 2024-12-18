@@ -3,6 +3,7 @@ import "./SellerNavbar.css";
 import { useEffect } from "react";
 import Cookies from 'js-cookie';
 import {decodeToken} from 'react-jwt';
+import {Link} from 'react-router-dom'
 const SellerNavbar = () => {
     const [username,setuserName] = useState('');
     const [shopname , setshopname]  = useState('');
@@ -24,6 +25,7 @@ const SellerNavbar = () => {
         }
     },[])
   return (
+    
     <div className="sellernavbar-container">
     
       <div className="sellernavbar-header">
@@ -39,9 +41,9 @@ const SellerNavbar = () => {
   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 21V9h6v12" />
 </svg>
 
-            <a href="/seller/dashboard" className="sellernavbar-link">
-            Dashboard
-          </a>
+<Link to="/sellerhome" className="sellernavbar-link">
+  Dashboard
+</Link>
             </div>
          
         </li>
@@ -68,9 +70,9 @@ const SellerNavbar = () => {
 </svg>
 
 
-          <a href="/seller/orders" className="sellernavbar-link">
-         Orders
-          </a>
+<Link to="/seller/orders" className="sellernavbar-link">
+  Orders
+</Link>
 
           </div>
         </li>
@@ -91,9 +93,9 @@ const SellerNavbar = () => {
   <path d="M7 7h.01" />
 </svg>
 
-        <a href="/seller/products" className="sellernavbar-link">
-         Products
-          </a>
+<Link to="/seller/products" className="sellernavbar-link">
+  Products
+</Link>
         </div>
         </li>
 
@@ -114,9 +116,9 @@ const SellerNavbar = () => {
   <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2h-1.16a2 2 0 01-2-2v-.19a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2v-1.16a2 2 0 012-2h.19a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33h.16a1.65 1.65 0 001-1V3a2 2 0 012-2h1.16a2 2 0 012 2v.19a1.65 1.65 0 001 1 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v.16a1.65 1.65 0 001 1h.19a2 2 0 012 2v1.16a2 2 0 01-2 2h-.19a1.65 1.65 0 00-1 1z" />
 </svg>
 
-          <a href="/seller/orders" className="sellernavbar-link">
-            Settings
-          </a>
+<Link to="/seller/settings" className="sellernavbar-link">
+  Settings
+</Link>
           </div>
         </li>
       </ul>
@@ -125,6 +127,7 @@ const SellerNavbar = () => {
         <p className="sellernavbar-shop-name">{shopname}</p>
       </div>
     </div>
+  
   );
 };
 
