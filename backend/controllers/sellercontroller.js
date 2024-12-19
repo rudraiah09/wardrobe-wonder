@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const seller = require('../models/sellerSchema');
 const jwt  = require('jsonwebtoken');
 const secret = "venkat";
+const multer = require('multer')
+const upload = multer({dest:'uploads'});
 async function handleloginseller(req,res) {
   try {
     const {email, password} = req.body;
@@ -32,4 +34,18 @@ async function handleloginseller(req,res) {
     res.status(500).json({ message: "Server error" });
   }
 }
-module.exports = {handleloginseller}
+async function handleaddproduct(req,res) {
+  try {
+    const {title,description , price , category ,stock} = req.body;
+    let imageurl = null;
+    if(req.file){
+      imageurl = `/uploads/${req.file.filename}`
+    }
+    console.log(title,description,stock,category)
+    console.log(imageurl)
+    console.log(authToken + "400")
+  } catch (error) {
+    res.status(500).json({message:'internal server error'})
+  }
+}
+module.exports = {handleloginseller , handleaddproduct}

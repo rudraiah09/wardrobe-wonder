@@ -6,6 +6,7 @@ import SellerNavbar from "./seller/Sellernabvar.js";  // Local change
 import SellerDashboard from "./seller/Dashboard.js";
 import BuyerLogin from "./buyer/buyerlogin.js";  // Remote change
 import BuyerSignup from "./buyer/buyersignup.js"; // Remote change
+import ProductList from "./seller/Products.js";
 
 function App() {
   return (
@@ -15,7 +16,17 @@ function App() {
             <Route path="/" element={<Index1></Index1>}></Route>
             <Route path="/seller-login" element={<Login></Login>}></Route>
             <Route path="/sellerhome" element={<div style={{display:'flex'}}><SellerNavbar></SellerNavbar><SellerDashboard></SellerDashboard></div>}></Route>
-            <Route path="/seller/products" element={<><SellerNavbar></SellerNavbar></>}></Route>
+            <Route
+  path="/seller/products"
+  element={
+    <div style={{ display: 'flex', overflow: 'hidden', height: '100vh' }}>
+      <SellerNavbar />
+      
+        <ProductList />
+      </div>
+    
+  }
+/>
            
             <Route path="/seller/settings" element={<><SellerNavbar></SellerNavbar></>}></Route>
             <Route path="/seller/orders" element={<><SellerNavbar></SellerNavbar></>}></Route>
