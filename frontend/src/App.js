@@ -12,12 +12,15 @@ import BuyerCart from "./buyer/BuyerCart.js";
 import BuyerOrders from "./buyer/BuyerOrders.js";
 import BuyerWishlist from "./buyer/BuyerWishlist.js";
 
+import AdminLogin from "./admin/AdminLogin.jsx";
+
 function App() {
   return (
     <div className="App">
       <Router>
           <Routes>
             <Route path="/" element={<Index1></Index1>}></Route>
+            <Route path="/admin-login" element={<AdminLogin></AdminLogin>}></Route>
             <Route path="/seller-login" element={<Login></Login>}></Route>
             <Route path="/sellerhome" element={<div style={{display:'flex'}}><SellerNavbar></SellerNavbar><SellerDashboard></SellerDashboard></div>}></Route>
             <Route path="/seller/products" element={<><SellerNavbar></SellerNavbar></>}></Route>
