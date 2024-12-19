@@ -8,12 +8,15 @@ import BuyerLogin from "./buyer/buyerlogin.js";  // Remote change
 import BuyerSignup from "./buyer/buyersignup.js"; // Remote change
 import ProductList from "./seller/Products.js";
 
+import AdminLogin from "./admin/AdminLogin.jsx";
+
 function App() {
   return (
     <div className="App">
       <Router>
           <Routes>
             <Route path="/" element={<Index1></Index1>}></Route>
+            <Route path="/admin-login" element={<AdminLogin></AdminLogin>}></Route>
             <Route path="/seller-login" element={<Login></Login>}></Route>
             <Route path="/sellerhome" element={<div style={{display:'flex'}}><SellerNavbar></SellerNavbar><SellerDashboard></SellerDashboard></div>}></Route>
             <Route
