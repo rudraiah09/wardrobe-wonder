@@ -6,7 +6,15 @@ import SellerNavbar from "./seller/Sellernabvar.js";  // Local change
 import SellerDashboard from "./seller/Dashboard.js";
 import BuyerLogin from "./buyer/buyerlogin.js";  // Remote change
 import BuyerSignup from "./buyer/buyersignup.js"; // Remote change
+<<<<<<< HEAD
 import ProductList from "./seller/Products.js";
+=======
+import BuyerHome from "./buyer/BuyerHome.js";
+import BuyerProfile from "./buyer/BuyerProfile";
+import BuyerCart from "./buyer/BuyerCart.js";
+import BuyerOrders from "./buyer/BuyerOrders.js";
+import BuyerWishlist from "./buyer/BuyerWishlist.js";
+>>>>>>> 753268350c31e9347cdb9370f8b5f9c411ef0a5a
 
 import AdminLogin from "./admin/AdminLogin.jsx";
 
@@ -33,8 +41,15 @@ function App() {
            
             <Route path="/seller/settings" element={<><SellerNavbar></SellerNavbar></>}></Route>
             <Route path="/seller/orders" element={<><SellerNavbar></SellerNavbar></>}></Route>
+
+            {/* Buyer Routes */}
             <Route path="/buyer-login" element={<BuyerLogin></BuyerLogin>}></Route>
             <Route path="/buyer-signup" element={<BuyerSignup></BuyerSignup>}></Route>
+            <Route path="/buyerhome" element={<BuyerHome></BuyerHome>}></Route>
+            <Route path="/buyerprofile" element={<BuyerProfile />} />
+            <Route path="/buyercart" element={<BuyerCart />} />
+            <Route path="/buyerwishlist" element={<BuyerWishlist />} />
+            <Route path="/buyerorders" element={<BuyerOrders />} />
           </Routes>
       </Router>
     </div>

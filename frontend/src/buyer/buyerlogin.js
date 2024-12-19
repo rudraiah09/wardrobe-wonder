@@ -17,7 +17,7 @@ function BuyerLogin() {
         password: password
       }, { withCredentials: true });
 
-      navigate('/home');
+      navigate('/buyerhome');
     } catch (error) {
       if (error.response && error.response.data.message) {
         setErrorMessage(error.response.data.message);

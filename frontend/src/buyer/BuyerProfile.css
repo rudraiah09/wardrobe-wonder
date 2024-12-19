@@ -1,0 +1,34 @@
+.buyer-profile {
+    font-family: Arial, sans-serif;
+    background-color: #393E46;
+    color: #EEEEEE;
+    padding: 20px;
+  }
+  
+  .profile-card {
+    background-color: #222831;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+  }
+  
+  .profile-card p {
+    color: #EEEEEE;
+  }
+  
+  .logout-btn {
+    background-color: #FFD369;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #222831;
+    font-weight: bold;
+  }
+  
+  .logout-btn:hover {
+    background-color: #393E46;
+    color: #FFD369;
+  }
+  

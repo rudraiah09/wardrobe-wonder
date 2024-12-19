@@ -1,0 +1,29 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #222831;
+    color: #FFD369;
+    padding: 10px 20px;
+    border-bottom: 2px solid #393E46;
+  }
+  
+  .header-title {
+    font-size: 34px;
+  }
+  
+  .header-nav {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .header-link {
+    text-decoration: none;
+    color: #FFD369;
+    font-weight: bold;
+  }
+  
+  .header-link:hover {
+    color: #EEEEEE;
+  }
+  
