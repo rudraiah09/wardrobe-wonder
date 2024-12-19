@@ -64,7 +64,7 @@ async function postloginpage(req, res) {
         }, secretkey, { expiresIn: 3000 });
 
         // Set cookie
-        res.cookie("authtoken", token, {
+        res.cookie("buyerauthToken", token, {
             httpOnly: true,
             secure: false, // Set to true in production with HTTPS
             sameSite: "lax",
