@@ -1,7 +1,8 @@
 const Users = require("../models/buyerSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const secretkey = "venkat";
+const Product = require('../models/productSchema');
+const secretkey = process.env.SECRET_KEY || "venkat"; // Use an environment variable for the secret key
 
 // POST Signup Route (for handling form submission from React)
 async function postsignuppage(req, res) {
@@ -12,16 +13,16 @@ async function postsignuppage(req, res) {
         return res.status(400).json({ message: "All fields are required." });
     }
 
-    const user = await Users.findOne({ email: email });
-    if (user) {
-        return res.status(400).json({ message: "User already exists" });
-    }
-
-    if (password !== confirmpassword) {
-        return res.status(400).json({ message: "Both passwords are not the same" });
-    }
-
     try {
+        const user = await Users.findOne({ email: email });
+        if (user) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+
+        if (password !== confirmpassword) {
+            return res.status(400).json({ message: "Passwords do not match" });
+        }
+
         // Hash the password before saving
         const hashedpassword = await bcrypt.hash(password, 10);
         await Users.create({
@@ -32,7 +33,7 @@ async function postsignuppage(req, res) {
         return res.status(201).json({ message: "User created, please login" });
     } catch (error) {
         console.log("An error occurred", error);
-        return res.status(500).json({ message: "An error occurred" });
+        return res.status(500).json({ message: "An error occurred, please try again later" });
     }
 }
 
@@ -42,7 +43,7 @@ async function postloginpage(req, res) {
 
     // Basic validation
     if (!email || !password) {
-        return res.status(400).json({ message: "Enter all details" });
+        return res.status(400).json({ message: "Please enter all details" });
     }
 
     try {
@@ -61,7 +62,7 @@ async function postloginpage(req, res) {
             id: user._id,
             name: user.name,
             email: user.email,
-        }, secretkey, { expiresIn: 3000 });
+        }, secretkey, { expiresIn: "1h" });
 
         // Set cookie
         res.cookie("buyerauthToken", token, {
@@ -78,7 +79,7 @@ async function postloginpage(req, res) {
 
 // GET Home Route (to serve user data after login)
 async function gethome(req, res) {
-    const token = req.cookies.authtoken;
+    const token = req.cookies.buyerauthToken; // Use the same cookie name here
     if (!token) {
         return res.status(401).json({ message: "Session expired, please login" });
     }
@@ -93,9 +94,27 @@ async function gethome(req, res) {
         return res.status(401).json({ message: "Session expired, please login" });
     }
 }
+async function getAllProducts(req, res) {
+    try {
+        // Fetching all products from the database
+        const products = await Product.find(); // Fetch all products
+
+        if (!products || products.length === 0) {
+            return res.status(404).json({ message: 'No products found' });
+        }
+
+        // Sending the fetched products in the response
+        res.status(200).json(products);
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        res.status(500).json({ message: 'Failed to fetch products' });
+    }
+}
+
 
 module.exports = {
     postsignuppage,
     postloginpage,
     gethome,
+    getAllProducts
 };

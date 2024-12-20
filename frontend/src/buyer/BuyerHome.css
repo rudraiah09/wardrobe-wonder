@@ -78,4 +78,10 @@ body {
   .btn:hover {
     opacity: 0.9;
   }
+  .product-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    max-height: 200px; /* Adjust the maximum height */
+  }
   
