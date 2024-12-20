@@ -2,9 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 const {handleloginseller ,handleaddproduct } = require('../controllers/sellercontroller')
-const {postsignuppage ,postloginpage} = require('../controllers/buyerloginsignup')
-
-const {handleloginseller } = require('../controllers/sellercontroller')
 
 const {postsignuppage ,postloginpage,gethome} = require('../controllers/buyerloginsignup')
 
@@ -19,6 +16,6 @@ router.post('/buyersignup',postsignuppage);
 
 router.post('/addnewproduct', handleaddproduct);
 
-router.post('/buyerhome',gethome);
+router.get('/buyerhome',gethome);
 
 module.exports = router;
