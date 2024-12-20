@@ -1,7 +1,11 @@
 import {useState,useEffect} from 'react';
 import './Products.css'
 import axios from 'axios'
+import Cookies from 'js-cookie';
+import {decodeToken} from 'react-jwt'
+import {useNavigate} from 'react-router-dom';
 const ProductList = () => {
+  const navigate = useNavigate();
     const [products, setProducts] = useState([
       {
         
@@ -21,11 +25,53 @@ const ProductList = () => {
     const [newProductcategory, setNewProductcategory] = useState('');
     const [newProductstock, setNewProductstock] = useState();
     const [imageFile, setImageFile] = useState(null);
+    const [email ,setEmail] = useState('')
     
-  
+    useEffect(()=>{
+      const token = Cookies.get('authToken');
+      if(token){
+        try {
+          const decoded = decodeToken(token);
+        const fetchemail = decoded.email;
+        console.log(fetchemail)
+        const fetchProducts = async () =>{
+          try {
+            const response = await axios.get(`http://localhost:3020/products?email=${fetchemail}`, {
+              withCredentials: true, 
+            });
+            console.log(response.data);
+            setProducts(response.data);
+            navigate('/seller/products');
+          } catch (error) {
+            console.log("error fetching the products")
+          } 
+        }
+          fetchProducts();
+          
+          
+          
+        } catch (error) {
+          console.log("token validation error" , error);
+        }
+
+      }
+    },[]);
     async function addProduct(e) {
         e.preventDefault();
-      
+       const token = Cookies.get('authToken');
+        if(token){
+                 try {
+                   const decoded = decodeToken(token);
+                   console.log(decoded);
+                   setEmail(decoded.email)
+                   console.log(email)
+                 } catch (error) {
+                    console.error("token validation failed" ,error);
+                 }
+               }
+               else{
+                   console.log("no user details found");
+               }
         try {
           const formData = new FormData();
           formData.append('title', newProducttitle);
@@ -33,23 +79,25 @@ const ProductList = () => {
           formData.append('price', newProductprice);
           formData.append('category', newProductcategory);
           formData.append('stock', newProductstock);
+          formData.append('email' , email)
       
           if (imageFile) {
             formData.append('image', imageFile); 
           }
       
-         
+         console.log(formData.get('image'));
+         console.log(formData.get('email'))
           const response = await axios.post(
             'http://localhost:3020/addnewproduct',
-            formData,
-            {
+            formData, {
               headers: {
-                'Content-Type': 'multipart/form-data',
+                'Content-Type': 'multipart/form-data', 
               },
-              withCredentials: true, 
+              withCredentials: true, // Include credentials if needed
             }
+            
           );
-      
+        
           if (response.status === 200) {
             console.log('Product added successfully:', response.data);
             setNewProducttitle('');

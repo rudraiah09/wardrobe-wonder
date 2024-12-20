@@ -22,7 +22,7 @@ function AdminLogin() {
       );
 
       // Navigate to admin dashboard after successful login
-      navigate("/sellerhome");
+      navigate("/adminhome");
     } catch (error) {
       if (error.response && error.response.data.message) {
         setErrorMessage(error.response.data.message);
