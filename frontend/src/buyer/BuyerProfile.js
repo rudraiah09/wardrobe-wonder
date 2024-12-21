@@ -11,7 +11,7 @@ const BuyerProfile = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await axios.get('/buyerprofile', {
+        const response = await axios.get('http://localhost:3020/buyerProfile', {
           withCredentials: true, // Send cookies with the request
         });
         console.log('Fetched User:', response.data); // Log the response to check the structure
@@ -21,24 +21,29 @@ const BuyerProfile = () => {
         if (error.response?.status === 401) {
           // Redirect to login if unauthorized
           navigate('/buyerlogin');
-        }else {
+        } else {
           console.error('Error details:', error.response?.data || error.message);
-      }
+        }
       }
     };
 
     fetchUserDetails();
   }, [navigate]);
 
-  const handleLogout = () => {
-    axios.post('/api/logout', {}, { withCredentials: true })
-      .then(() => {
-        navigate('/buyerlogin'); // Redirect to login page after logout
-      })
-      .catch(error => {
-        console.error("Error during logout", error);
-      });
+
+  const handleLogout = async () => {
+      try {
+          await axios.post('http://localhost:3020/buyerlogout', {}, {
+              withCredentials: true, // Include cookies in the request
+          });
+          alert('logged out successfully');
+          navigate('/buyer-login');
+      } catch (error) {
+          console.error("Error during logout", error);
+          alert('logout failed');
+      }
   };
+  
 
   return (
     <div className="profile-container">

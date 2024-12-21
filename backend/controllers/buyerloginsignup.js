@@ -1,4 +1,6 @@
 const Users = require("../models/buyerSchema");
+const Cart = require("../models/cartSchema");
+const Wishlist = require("../models/wishlistSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Product = require('../models/productSchema');
@@ -111,10 +113,39 @@ async function getAllProducts(req, res) {
     }
 }
 
+async function buyerProfile(req, res) {
+    const token = req.cookies.buyerauthToken; // Use the same cookie name as in `gethome`
+    if (!token) {
+        return res.status(401).json({ message: "Session expired, please login" });
+    }
+    try {
+        // Verify the JWT token
+        const decoded = jwt.verify(token, secretkey);
+
+        // Fetch user details (name and email) from the database
+        const user = await Users.findOne({ email: decoded.email }); // Modify according to your schema
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Return user details
+        return res.status(200).json({ name: user.name, email: user.email });
+    } catch (error) {
+        console.error("Error in buyerProfile:", error);
+        return res.status(401).json({ message: "Session expired, please login" });
+    }
+}
+
+async function buyerlogout(req, res) {
+    res.clearCookie('buyerauthToken'); // Adjusted cookie name
+    res.status(200).send({ message: 'Logged out successfully' });
+}
 
 module.exports = {
     postsignuppage,
     postloginpage,
     gethome,
-    getAllProducts
+    getAllProducts,
+    buyerProfile,
+    buyerlogout
 };

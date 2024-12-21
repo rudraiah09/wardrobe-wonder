@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path')
 const {handleloginseller ,handleaddproduct,fetchproducts } = require('../controllers/sellercontroller')
-const {postsignuppage ,postloginpage,gethome,getAllProducts} = require('../controllers/buyerloginsignup')
+const {postsignuppage ,postloginpage,gethome,getAllProducts,buyerProfile,buyerlogout} = require('../controllers/buyerloginsignup')
 const {handleLoginAdmin} = require('../controllers/admincontroller');
 
 
@@ -30,4 +30,6 @@ router.post('/addnewproduct', upload.single('image'), handleaddproduct);
 
 router.post('/buyerhome',gethome);
 router.get('/buyerhome', getAllProducts);
+router.get('/buyerprofile', buyerProfile);
+router.post('/buyerlogout', buyerlogout);
 module.exports = router;
