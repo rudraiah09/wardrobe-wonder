@@ -1,6 +1,4 @@
 const Users = require("../models/buyerSchema");
-const Cart = require("../models/cartSchema");
-const Wishlist = require("../models/wishlistSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Product = require('../models/productSchema');
