@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path')
 const {handleloginseller ,handleaddproduct,fetchproducts } = require('../controllers/sellercontroller')
-const {postsignuppage ,postloginpage,gethome,getAllProducts,buyerProfile,buyerlogout} = require('../controllers/buyerloginsignup')
+const {postsignuppage ,postloginpage,gethome,getAllProducts,buyerProfile,buyerlogout,getWishlist,addToWishlist,modifyWishlist, addToCart, getCart} = require('../controllers/buyerloginsignup')
 const {handleLoginAdmin} = require('../controllers/admincontroller');
 
 
@@ -32,4 +32,15 @@ router.post('/buyerhome',gethome);
 router.get('/buyerhome', getAllProducts);
 router.get('/buyerprofile', buyerProfile);
 router.post('/buyerlogout', buyerlogout);
+
+// Route for getting the wishlist (GET request)
+router.get('/buyerwishlist', getWishlist);
+router.get('/buyercart',getCart)
+// Route for adding an item to the wishlist (POST request)
+router.post('/buyerhome1', addToWishlist);
+
+// Route for removing an item from the wishlist (DELETE request)
+router.delete('/buyerwishlist/:itemId', modifyWishlist);
+router.post('/buyerhome2', addToCart);
+
 module.exports = router;

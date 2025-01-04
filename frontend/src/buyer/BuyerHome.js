@@ -7,8 +7,16 @@ const BuyerHome = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true); // Adding a loading state
   const [error, setError] = useState(null); // Adding an error state
+  const [user, setUser] = useState(null); // Declare the user state
 
   useEffect(() => {
+    // Fetch user data (e.g., buyerId) from local storage or token
+    const fetchUser = () => {
+      const storedUser = JSON.parse(localStorage.getItem('user')); // Assuming user info is saved in localStorage
+      setUser(storedUser); // Store user data
+    };
+    fetchUser();
+
     const fetchProducts = async () => {
       try {
         const response = await axios.get('http://localhost:3020/buyerhome');
@@ -24,13 +32,75 @@ const BuyerHome = () => {
     fetchProducts();
   }, []);
 
-  const handleAddToWishlist = (productId) => {
-    console.log(`Added product ${productId} to wishlist.`);
-  };
+  const handleAddToWishlist = async (product) => {
+    console.log('User object:', user);
+    if (!user) {
+        alert('Please log in to add items to your wishlist.');
+        return;
+    }
 
-  const handleAddToCart = (productId) => {
-    console.log(`Added product ${productId} to cart.`);
-  };
+    console.log('User ID:', user._id); // Verify user._id value
+    console.log(product._id);
+
+    try {
+        const response = await axios.post(
+            'http://localhost:3020/buyerhome1',
+            {
+                buyerId: user._id,
+                productId: product._id,
+                title: product.title,
+                price: product.price,
+                image: product.image,
+            },
+            {
+                withCredentials: true, // Ensure cookies are sent
+            }
+        );
+
+        if (response.status === 200) {
+            alert('Product added to wishlist successfully');
+        }
+    } catch (error) {
+        console.error('Error adding to wishlist:', error);
+        alert('Failed to add product to wishlist.');
+    }
+};
+
+const handleAddToCart = async (product) => {
+  console.log('User object:', user);
+  if (!user) {
+      alert('Please log in to add items to your cart.');
+      return;
+  }
+
+  console.log('User ID:', user._id); // Verify user._id value
+  console.log(product._id);
+
+  try {
+      const response = await axios.post(
+          'http://localhost:3020/buyerhome2',
+          {
+              buyerId: user._id, // Ensure this is sent
+              productId: product._id,
+              title: product.title,
+              price: product.price,
+              quantity: 1, // Default quantity to 1
+              image: product.image,
+          },
+          {
+              withCredentials: true, // Ensure cookies are sent
+          }
+      );
+
+      if (response.status === 200) {
+          alert('Product added to cart successfully');
+      }
+  } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Failed to add product to cart.');
+  }
+};
+
 
   if (loading) {
     return <p>Loading products...</p>;
@@ -59,13 +129,13 @@ const BuyerHome = () => {
               <div className="product-actions">
                 <button
                   className="btn wishlist-btn"
-                  onClick={() => handleAddToWishlist(product._id)}
+                  onClick={() => handleAddToWishlist(product)}
                 >
                   Add to Wishlist
                 </button>
                 <button
                   className="btn cart-btn"
-                  onClick={() => handleAddToCart(product._id)}
+                  onClick={() => handleAddToCart(product)}
                 >
                   Add to Cart
                 </button>
