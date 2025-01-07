@@ -47,6 +47,7 @@ const BuyerCart = () => {
               <h3>{item.title}</h3>
               <p>{item.description}</p>
               <p>Price: ${item.price}</p>
+              <p>Quantity:{item.quantity}</p>
             </div>
           ))}
         </div>
