@@ -69,7 +69,7 @@ async function fetchproducts(req, res) {
       // Directly use the stored image path, no need to add 'uploads/' again
       const imagePath = product.image;
 
-      console.log("Constructed image path:", imagePath); // Log the constructed image path
+      console.log("Constructed image path: from seller", imagePath); // Log the constructed image path
 
       return {
         ...product.toObject(),

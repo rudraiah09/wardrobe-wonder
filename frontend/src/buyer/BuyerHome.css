@@ -9,6 +9,13 @@ body {
   .buyer-home {
     padding: 20px;
   }
+  .buyer-products-image {
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
   
   /* Header Styles */
   .header {

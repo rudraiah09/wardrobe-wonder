@@ -2,24 +2,37 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './BuyerHome.css'; // Importing the CSS file
 import Header from './Header';
+import Cookies from 'js-cookie';
+import {decodeToken} from 'react-jwt'
 
 const BuyerHome = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true); // Adding a loading state
   const [error, setError] = useState(null); // Adding an error state
-  const [user, setUser] = useState(null); // Declare the user state
+  const [user, setUser] = useState(''); // Declare the user state
 
   useEffect(() => {
     // Fetch user data (e.g., buyerId) from local storage or token
-    const fetchUser = () => {
-      const storedUser = JSON.parse(localStorage.getItem('user')); // Assuming user info is saved in localStorage
-      setUser(storedUser); // Store user data
-    };
-    fetchUser();
+      const token = Cookies.get('buyerauthToken');
+      console.log(token)
+      
+           if(token){
+             try {
+               const decoded = decodeToken(token);
+               console.log(decoded.email)
+             setUser(decoded.email)
+
+             console.log(user)}
+             catch{
+              console.log(error)
+             }
+            }
+             
 
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:3020/buyerhome');
+        const response = await axios.get('http://localhost:3020/buyerhome' , {withCredentials:true});
+        console.log(response.data)
         setProducts(response.data);
         setLoading(false);
       } catch (error) {
@@ -39,14 +52,14 @@ const BuyerHome = () => {
         return;
     }
 
-    console.log('User ID:', user._id); // Verify user._id value
+    console.log('User ID:', user); // Verify user._id value
     console.log(product._id);
 
     try {
         const response = await axios.post(
             'http://localhost:3020/buyerhome1',
             {
-                buyerId: user._id,
+                buyerId: user,
                 productId: product._id,
                 title: product.title,
                 price: product.price,
@@ -73,18 +86,17 @@ const handleAddToCart = async (product) => {
       return;
   }
 
-  console.log('User ID:', user._id); // Verify user._id value
+  console.log('User ID:', user); // Verify user._id value
   console.log(product._id);
 
   try {
       const response = await axios.post(
           'http://localhost:3020/buyerhome2',
           {
-              buyerId: user._id, // Ensure this is sent
+              buyerId: user,
               productId: product._id,
               title: product.title,
               price: product.price,
-              quantity: 1, // Default quantity to 1
               image: product.image,
           },
           {
@@ -121,11 +133,11 @@ const handleAddToCart = async (product) => {
         <div className="product-list">
           {products.map((product) => (
             <div key={product._id} className="product-card">
-              <img src={product.image} alt={product.title} className="products-image" />
+              <img src={product.image} alt={product.title} className="buyer-products-image" />
               <h3>{product.title}</h3>
               <p>{product.description}</p>
               <p>Price: ${product.price}</p>
-              <p>Seller Email: {product.sellerEmail}</p> {/* Displaying seller email */}
+             
               <div className="product-actions">
                 <button
                   className="btn wishlist-btn"

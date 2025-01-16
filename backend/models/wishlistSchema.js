@@ -1,6 +1,6 @@
 const mongoose= require('mongoose');
 const wishlistSchema = new mongoose.Schema({
-    buyerId: { type: String, required: true }, // ID of the buyer
+    buyerId: { type: String, required: true , unique: true}, // ID of the buyer
     items: [
       {
         productId: { type: String, required: true },
@@ -11,5 +11,5 @@ const wishlistSchema = new mongoose.Schema({
     ],
     createdAt: { type: Date, default: Date.now }
   });
-const wishlist = mongoose.model('wishlist',wishlistSchema);
-module.exports = wishlist;
+const Wishlist = mongoose.model('wishlist',wishlistSchema);
+module.exports = Wishlist;

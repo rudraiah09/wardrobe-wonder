@@ -5,10 +5,16 @@
     padding: 20px;
     margin-top: 80px;
   }
-  
+  .wishlist-image{
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
   .wishlist-items {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 20px;
   }
   

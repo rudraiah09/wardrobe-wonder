@@ -2,27 +2,53 @@ import React, { useEffect, useState } from 'react';
 import Header from './Header';
 import axios from 'axios';
 import './BuyerWishlist.css';
+import Cookies from 'js-cookie';
+import {decodeToken} from 'react-jwt'
 
 const BuyerWishlist = () => {
   const [wishlist, setWishlist] = useState([]);
   const [error, setError] = useState(null);
+  const [user,setUser] = useState('');
 
   useEffect(() => {
-    const fetchWishlist = async () => {
+    const token = Cookies.get('buyerauthToken');
+    console.log(token);
+  
+    if (token) {
       try {
+        const decoded = decodeToken(token);
+        console.log(decoded.email);
+        setUser(decoded.email); // Update state with the decoded email
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    }
+  }, []); // Run only once on component mount
+  
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      if (!user) {
+        console.log('User is not defined yet.');
+        return;
+      }
+  
+      try {
+        console.log('Sending request to backend...');
         const response = await axios.get('http://localhost:3020/buyerwishlist', {
+          params: { email: user }, // Pass the user email as a query parameter
           withCredentials: true, // Include cookies for authentication
         });
-
+  
         if (response.status === 200) {
-          setWishlist(response.data); // Update wishlist state
+          setWishlist(response.data.updatedProducts); // Update wishlist state
+          console.log('Wishlist data:', response.data.updatedProducts);
         } else {
           console.error('Unexpected response:', response);
           setError('Unexpected response from server.');
         }
       } catch (error) {
         console.error('Error fetching wishlist:', error);
-
+  
         if (error.response && error.response.status === 401) {
           setError('Unauthorized: Please log in to view your wishlist.');
         } else {
@@ -30,10 +56,10 @@ const BuyerWishlist = () => {
         }
       }
     };
-
+  
     fetchWishlist();
-  }, []);
-
+  }, [user]); // Run this effect whenever `user` changes
+  
 // Handle removing an item from the wishlist
 const handleRemoveItem = async (itemId) => {
   // Confirm the removal action
@@ -74,6 +100,7 @@ const handleRemoveItem = async (itemId) => {
         <div className="wishlist-items">
           {wishlist.map((item) => (
             <div key={item._id} className="wishlist-item">
+              <img src={item.image} alt= { "img"} className='wishlist-image' ></img> 
               <h3>{item.title}</h3>
               <p>{item.description}</p>
               <p>Price: ${item.price}</p>

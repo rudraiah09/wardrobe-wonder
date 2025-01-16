@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const Product = require('../models/productSchema');
 const Wishlist = require('../models/wishlistSchema');
 const Cart = require('../models/cartSchema');
+const buyer = require("../models/buyerSchema");
 const secretkey = process.env.SECRET_KEY || "venkat"; // Use an environment variable for the secret key
 
 // POST Signup Route (for handling form submission from React)
@@ -67,11 +68,13 @@ async function postloginpage(req, res) {
         }, secretkey, { expiresIn: "1h" });
 
         // Set cookie
-        res.cookie("buyerauthToken", token, {
-            httpOnly: true,
-            secure: false, // Set to true in production with HTTPS
-            sameSite: "lax",
+        res.cookie('buyerauthToken', token, {
+          httpOnly: false,  // Set to true if you do not need frontend access
+          secure: false,    // Use true in production with HTTPS
+          sameSite: 'Lax',  // Adjust for cross-origin if needed
+          maxAge: 24 * 60 * 60 * 1000, // 1 day
         });
+        
         return res.status(200).json({ message: "Login successful", token });
     } catch (error) {
         console.log("An error occurred in login", error);
@@ -98,16 +101,23 @@ async function gethome(req, res) {
 }
 async function getAllProducts(req, res) {
     try {
-        // Fetching all products from the database
-        const products = await Product.find(); // Fetch all products
-
-        if (!products || products.length === 0) {
-            return res.status(404).json({ message: 'No products found' });
-        }
-
-        // Sending the fetched products in the response
-        res.status(200).json(products);
-    } catch (error) {
+        const products = await Product.find();
+        const updatedProducts = products.map(product => {
+          console.log("Product image field:", product.image); 
+    
+          
+          const imagePath = product.image;
+    
+          console.log("Constructed image path: from all", imagePath); 
+    
+          return {
+            ...product.toObject(),
+            image: product.image ? `${req.protocol}://${req.get('host')}${imagePath}` : null,
+          };
+        });
+    
+        res.status(200).json(updatedProducts);
+      }catch (error) {
         console.error('Error fetching products:', error);
         res.status(500).json({ message: 'Failed to fetch products' });
     }
@@ -144,48 +154,54 @@ async function buyerlogout(req, res) {
 // Get the wishlist for a specific buyer
 
 // Fetch wishlist for a buyer
-const getWishlist = async (req, res) => {
+async function getWishlist(req, res) {
+  const { email } = req.query;
+  console.log("hello");
+  console.log(email + " at get wish");
+
   try {
-      // Verify and decode the buyer authentication token
-      const token = req.cookies.buyerauthToken;
+    // Fetch the wishlist specific to the buyer (email)
+    const wishlist = await Wishlist.findOne({ buyerId: email });
+    
+    if (!wishlist || !wishlist.items || wishlist.items.length === 0) {
+      return res.status(404).json({ message: 'Wishlist is empty or not found for this user.' });
+    }
 
-      if (!token) {
-          return res.status(401).json({ message: 'Unauthorized: No authentication token provided.' });
-      }
+    console.log(wishlist + " this is wishlist");
 
-      const decoded = jwt.verify(token, secretkey); // Replace 'secretkey' with your actual secret key
-      const buyerId = decoded.id; // Extract the buyer ID from the token payload
+    // If items exist, proceed to fetch product details
+    const productIds = wishlist.items.map(item => item.productId);
+    console.log(productIds + "this is product")
 
+    const products = await Product.find({ _id: { $in: productIds } });
+    
+    const updatedProducts = products.map(product => {
+      console.log("Product image field:", product.image);
+      const imagePath = product.image;
+      console.log("Constructed image path:", imagePath);
 
-      // Fetch the wishlist for the authenticated buyer
-      const wishlist = await Wishlist.findOne({ buyerId });
-
-      if (!wishlist || wishlist.items.length === 0) {
-          return res.status(200).json([]); // Return an empty array if no wishlist or no items exist
-      }
-
-      // Return the wishlist items
-      res.status(200).json(wishlist.items);
+      return {
+        ...product.toObject(),
+        image: product.image ? `${req.protocol}://${req.get('host')}${imagePath}` : null,
+      };
+    });
+     
+    return res.status(200).json({ updatedProducts });
   } catch (error) {
-      console.error('Error fetching wishlist:', error);
-
-      if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
-          return res.status(401).json({ message: 'Invalid or expired authentication token.' });
-      }
-
-      res.status(500).json({ message: 'An error occurred while fetching the wishlist.' });
+    console.error('Error fetching wishlist products:', error);
+    return res.status(500).json({ message: 'Error fetching wishlist products.', error: error.message });
   }
-};
+}
 
-  
  // Add item to wishlist
  const addToWishlist = async (req, res) => {
   console.log('Request body:', req.body);
 
-  const { productId, title, price, image } = req.body; // Destructure the request body
+  const { buyerId,productId, title, price, image } = req.body; 
 
   // Extract the token from cookies
-  const token = req.cookies.buyerauthToken;
+  const token = buyerId;
+  console.log(token + " at wishlist ")
 
   if (!token) {
       console.error('Unauthorized: No token provided');
@@ -193,30 +209,24 @@ const getWishlist = async (req, res) => {
   }
 
   try {
-      // Verify and decode the token to extract buyerId
-      const decoded = jwt.verify(token, secretkey);
-      const buyerId = decoded.id;
-
-      console.log(`Decoded Buyer ID: ${buyerId}`);
-      console.log(`Product Details -> Product ID: ${productId}, Title: ${title}, Price: ${price}, Image: ${image}`);
-
-      // Validate required fields
+      
       if (!buyerId || !productId || !title || !price) {
           console.error('Missing required fields');
           return res.status(400).json({ error: 'Missing required fields' });
       }
 
       // Check if a wishlist exists for the buyer
-      let wishlist = await Wishlist.findOne({ buyerId });
+      let wishlist = await Wishlist.findOne({ buyerId:token });
       if (!wishlist) {
           console.log('No existing wishlist found. Creating a new one.');
-          wishlist = new Wishlist({ buyerId, items: [] });
+          wishlist = new Wishlist({ buyerId:token, items: [] });
       }
 
       // Check if the product is already in the wishlist
       const productExists = wishlist.items.some((item) => item.productId === productId);
       if (!productExists) {
           console.log('Adding product to the wishlist');
+          
           wishlist.items.push({ productId, title, price, image });
           await wishlist.save();
       } else {
