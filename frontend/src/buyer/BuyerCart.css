@@ -3,12 +3,14 @@
     background-color: #393E46;
     color: #EEEEEE;
     padding: 20px;
+    margin-top: 80px;
   }
   
   .cart-items {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    
   }
   
   .cart-item {
