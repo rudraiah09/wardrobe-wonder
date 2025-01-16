@@ -15,9 +15,8 @@ const sellerRequestSchema = new mongoose.Schema({
     shopname:{
         type:String,
         required:true
-    }
-
-
+    },
+ 
 })
 const sellerRequest = mongoose.model('sellerRequest', sellerRequestSchema)
 module.exports = sellerRequest;

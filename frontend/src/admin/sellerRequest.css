@@ -1,0 +1,79 @@
+.seller-requests {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #0a2647 0%, #144272 25%, #205295 50%, #2c74b3 75%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #ffffff;
+}
+
+.seller-requests-container {
+    background-color: #2c2f38; /* Dark gray from the image */
+    padding: 20px;
+    min-height: 100vh; /* Ensures it covers the full viewport height */
+}
+
+.seller-requests h1 {
+    text-align: center;
+    color: #f0f0f0;
+    font-family: 'Georgia', serif;
+    margin-bottom: 20px;
+}
+
+.seller-requests table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.seller-requests th, 
+.seller-requests td {
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #ccc;
+    color: #f0f0f0;
+}
+
+.seller-requests th {
+    background-color: #144272;
+    font-size: 1.1em;
+    font-family: Arial, sans-serif;
+}
+
+.seller-requests td {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.seller-requests button {
+    padding: 10px 15px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: Arial, sans-serif;
+}
+
+.seller-requests button:hover {
+    opacity: 0.9;
+}
+
+.seller-requests button:first-child {
+    background-color: #4caf50; /* Approve button green */
+    color: white;
+}
+
+.seller-requests button:first-child:hover {
+    background-color: #45a049;
+}
+
+.seller-requests button:last-child {
+    background-color: #f44336; /* Reject button red */
+    color: white;
+}
+
+.seller-requests button:last-child:hover {
+    background-color: #e53935;
+}

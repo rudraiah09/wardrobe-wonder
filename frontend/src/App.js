@@ -8,6 +8,11 @@ import BuyerLogin from "./buyer/buyerlogin.js";  // Remote change
 import BuyerSignup from "./buyer/buyersignup.js"; // Remote change
 
 import AdminLogin from "./admin/AdminLogin.jsx";
+import SellerRequestForm from "./admin/SellerRequestForm.js";
+import AdminDashboard from "./admin/AdminDashboard.js"; 
+import AdminNavbar from "./admin/Adminnavbar.js";
+import SellerDetails from "./admin/seller.js";
+import SellerRequests1 from "./admin/SellerRequest.js";
 
 function App() {
   return (
@@ -16,6 +21,12 @@ function App() {
           <Routes>
             <Route path="/" element={<Index1></Index1>}></Route>
             <Route path="/admin-login" element={<AdminLogin></AdminLogin>}></Route>
+            <Route path="/admindashboard" element={<><AdminNavbar/></>}></Route>
+            <Route path="/admin/dashboard" element={<><AdminNavbar/></>}></Route>
+            <Route path="/admin/seller-requests" element={<div style={{display:"flex", flexDirection:'row'}} ><><AdminNavbar/><SellerRequests1></SellerRequests1></></div>}></Route>
+            <Route path="/admin/sellers" element={<div style={{display:"flex", flexDirection:'row'}}><AdminNavbar/><SellerDetails></SellerDetails></div>}></Route>
+            <Route path="/admin/users" element={<><AdminNavbar/></>}></Route>
+            <Route path="/sellerRequest-Form" element={<SellerRequestForm></SellerRequestForm>}></Route>
             <Route path="/seller-login" element={<Login></Login>}></Route>
             <Route path="/sellerhome" element={<div style={{display:'flex'}}><SellerNavbar></SellerNavbar><SellerDashboard></SellerDashboard></div>}></Route>
             <Route path="/seller/products" element={<><SellerNavbar></SellerNavbar></>}></Route>

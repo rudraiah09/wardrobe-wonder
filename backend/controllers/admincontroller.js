@@ -1,12 +1,26 @@
 const mongoose = require('mongoose');
 const Admin = require('../models/adminSchema'); // Assuming the admin schema is named adminSchema
 const jwt = require('jsonwebtoken');
+const seller = require('../models/sellerSchema');
 
 const secret = "venkat"; // Replace with your secure secret key
+async function fetchsellers(req,res) {
+  console.log("sellers")
+  try {
+    const sellers = await seller.find();
+    if (sellers) {
+      res.status(200).json(sellers);
+    }
+  } catch (error) {
+    console.log(error);
 
+  }
+  
+}
 async function handleLoginAdmin(req, res) {
   try {
     const { email, password } = req.body;
+
 
     // Find the admin by email
     const admin = await Admin.findOne({ email });
@@ -27,8 +41,8 @@ async function handleLoginAdmin(req, res) {
     );
 
     // Set the token as a cookie in the response
-    res.cookie('authToken', token, {
-      httpOnly: true,
+    res.cookie('authToken2', token, {
+      httpOnly: false,
       secure: true, // Use secure cookies in production
       sameSite: 'Lax',
     });
@@ -40,4 +54,4 @@ async function handleLoginAdmin(req, res) {
   }
 }
 
-module.exports = { handleLoginAdmin };
+module.exports = { handleLoginAdmin,fetchsellers };
