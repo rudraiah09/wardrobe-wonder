@@ -1,0 +1,201 @@
+/* General Styles */
+.profile-page {
+  display: flex;
+  font-family: Arial, sans-serif;
+  background-color: #393E46; /* Dark background */
+  color: #EEEEEE; /* Light text color */
+  min-height: 100vh;
+  padding-top: 60px; /* Leave space for fixed header */
+  position: relative; /* Ensure proper stacking context */
+}
+
+/* Header */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 98%;
+  background-color: #222831; /* Dark background for header */
+  color: #FFD369; /* Highlight color for text */
+  padding: 15px 20px;
+  text-align: center;
+  font-weight: bold;
+  z-index: 1000; /* Ensure header stays on top of the sidebar and content */
+}
+
+/* Wrapper for Sidebar and Profile Content */
+.profile-wrapper {
+  display: flex;
+  flex-grow: 1;
+  overflow: auto; /* Allow scrolling */
+  position: relative; /* Required for moving sidebar and content together */
+  width: 100%;
+  margin-top: 60px; /* Offset the wrapper below the fixed header */
+}
+
+/* Sidebar */
+.sidebar {
+  background-color: #222831; /* Sidebar background */
+  width: 300px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  position: sticky; /* Sidebar sticks on scroll */
+  top: 0; /* Ensure the sidebar sticks to the top */
+  height: calc(100vh - 60px); /* Full height, minus the header */
+  z-index: 800; /* Ensure sidebar stays below the header */
+  overflow: hidden; /* Remove sidebar scrollbar */
+  margin-top: 40px;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar-header .profile-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%; /* Circular shape */
+  object-fit: cover;
+  border: 2px solid #FFD369; /* Highlight border */
+}
+
+.sidebar-header p {
+  color: #FFD369; /* Highlight color */
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* Sidebar Menu */
+.sidebar-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-menu li {
+  padding: 10px 15px;
+  cursor: pointer;
+  color: #EEEEEE; /* Light text */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar-menu li:hover,
+.sidebar-menu li.active {
+  background-color: #FFD369; /* Highlight background */
+  color: #222831; /* Dark text */
+}
+
+.logout-btn {
+  background-color: #FFD369; /* Button background */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #222831; /* Dark button text */
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #393E46; /* Dark hover background */
+  color: #FFD369; /* Highlight hover text */
+}
+
+/* Main Content */
+.profile-content {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto; /* Enable scrolling if the content exceeds the screen height */
+  margin-top: 40px;
+}
+
+/* Profile Content Styles */
+.profile-content h2 {
+  color: #FFD369; /* Highlight color for headings */
+  margin-bottom: 20px;
+}
+
+/* Personal Info Section */
+.personal-info .info-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.personal-info label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.personal-info input[type="text"],
+.personal-info input[type="email"] {
+  padding: 10px;
+  border: 1px solid #FFD369; /* Highlight border */
+  border-radius: 5px;
+  background-color: #222831; /* Input background */
+  color: #EEEEEE; /* Light text color */
+}
+
+.personal-info button {
+  margin-top: 10px;
+  width: 70px;
+  background-color: #FFD369; /* Button background */
+  color: #222831; /* Dark text */
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.personal-info button:hover {
+  background-color: #393E46; /* Dark hover background */
+  color: #FFD369; /* Highlight hover text */
+}
+
+.personal-info input[type="radio"] {
+  margin-right: 5px;
+}
+
+/* Actions Section */
+.actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.deactivate-btn,
+.delete-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.deactivate-btn {
+  background-color: #FFD369; /* Button background */
+  color: #222831; /* Dark text */
+}
+
+.deactivate-btn:hover {
+  background-color: #393E46; /* Dark hover background */
+  color: #FFD369; /* Highlight hover text */
+}
+
+.delete-btn {
+  background-color: #FF5C5C; /* Delete button background (Red) */
+  color: #FFFFFF; /* White text */
+}
+
+.delete-btn:hover {
+  background-color: #FF1E1E; /* Hover Red */
+  color: #EEEEEE; /* Light text */
+}
