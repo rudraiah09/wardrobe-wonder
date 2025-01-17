@@ -300,29 +300,22 @@ async function getWishlist(req, res) {
   };
 // Add product to cart
 const addToCart = async (req, res) => {
-  const token = req.cookies.buyerauthToken; // Ensure token is retrieved correctly
-
-  if (!token) {
-    return res.status(401).json({ message: 'Unauthorized: Token not provided.' });
-  }
-
   try {
-    // Decode the token to get the buyer ID
-    const decoded = jwt.verify(token, secretkey);
-    const buyerId = decoded.id;
+  
 
-    console.log('Buyer ID:', buyerId);
+    const { buyerId,productId, title, price, quantity, image } = req.body;
+    console.log(buyerId + "at cart")
 
-    const { productId, title, price, quantity, image } = req.body;
-
-    let cart = await Cart.findOne({ buyerId });
+    let cart = await Cart.findOne({ buyerId:buyerId });
 
     if (!cart) {
       cart = new Cart({
-        buyerId,
+        buyerId : buyerId,
         items: [{ productId, title, price, quantity, image }],
         total: price * quantity,
+        
       });
+      console.log(cart+ "317")
     } else {
       const existingItem = cart.items.find(item => item.productId === productId);
 
@@ -351,34 +344,40 @@ const addToCart = async (req, res) => {
 };
 //fetch cart
 const getCart = async (req, res) => {
+  const { email } = req.query;
+  console.log(email + " at get cart");
+
   try {
-      // Verify and decode the buyer authentication token
-      const token = req.cookies.buyerauthToken;
+    // Fetch the wishlist specific to the buyer (email)
+    const cart = await Cart.findOne({ buyerId: email });
+    
+    if (!cart || !cart.items || cart.items.length === 0) {
+      return res.status(404).json({ message: 'Wishlist is empty or not found for this user.' });
+    }
 
-      if (!token) {
-          return res.status(401).json({ message: 'Unauthorized: No authentication token provided.' });
-      }
+    console.log(cart + " this is wishlist");
 
-      const decoded = jwt.verify(token, secretkey); // Replace 'secretkey' with your actual secret key
-      const buyerId = decoded.id; // Extract the buyer ID from the token payload
+    // If items exist, proceed to fetch product details
+    const productIds = cart.items.map(item => item.productId);
+    console.log(productIds + "this is product")
 
-      // Fetch the cart for the authenticated buyer
-      const cart = await Cart.findOne({ buyerId });
+    const products = await Product.find({ _id: { $in: productIds } });
+    
+    const updatedProducts = products.map(product => {
+      console.log("Product image field:", product.image);
+      const imagePath = product.image;
+      console.log("Constructed image path:", imagePath);
 
-      if (!cart || cart.items.length === 0) {
-          return res.status(200).json({ message: 'Cart is empty.' }); // Return a message if no cart or no items exist
-      }
-
-      // Return the cart items
-      res.status(200).json(cart.items);
+      return {
+        ...product.toObject(),
+        image: product.image ? `${req.protocol}://${req.get('host')}${imagePath}` : null,
+      };
+    });
+     console.log("end")
+    return res.status(200).json({ updatedProducts });
   } catch (error) {
-      console.error('Error fetching cart:', error);
-
-      if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
-          return res.status(401).json({ message: 'Invalid or expired authentication token.' });
-      }
-
-      res.status(500).json({ message: 'An error occurred while fetching the cart.' });
+    console.error('Error fetching wishlist products:', error);
+    return res.status(500).json({ message: 'Error fetching wishlist products.', error: error.message });
   }
 };
 
