@@ -114,6 +114,7 @@ const handleAddToCart = async (product) => {
               title: product.title,
               price: product.price,
               image: product.image,
+              quantity:1
           },
           {
               withCredentials: true, // Ensure cookies are sent

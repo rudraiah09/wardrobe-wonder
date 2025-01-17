@@ -10,7 +10,6 @@ const {handleloginseller ,handleaddproduct,fetchproducts } = require('../control
 const {postsignuppage ,postloginpage,gethome,getAllProducts,buyerProfile,buyerlogout,getWishlist,addToWishlist,modifyWishlist, addToCart, getCart} = require('../controllers/buyerloginsignup')
 
 
-
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, path.join(__dirname, '..', 'uploads')); // Directory to save uploaded files
