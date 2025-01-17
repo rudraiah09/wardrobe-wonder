@@ -57,7 +57,7 @@ async function postloginpage(req, res) {
 
         const ismatch = await bcrypt.compare(password, user.password);
         if (!ismatch) {
-            return res.status(400).json({ message: "Incorrect password" });
+            return res.status(400).json({ message: "Incorrect password" }); 
         }
 
         // Create JWT token

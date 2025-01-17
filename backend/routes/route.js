@@ -1,16 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const {handleloginseller } = require('../controllers/sellercontroller')
 const {handleLoginAdmin,fetchsellers} = require('../controllers/admincontroller')
-const {postsignuppage ,postloginpage} = require('../controllers/buyerloginsignup');
 const sellerRequestController =require('../controllers/sellerRequestController')
 
 const multer = require('multer');
 const path = require('path')
 const {handleloginseller ,handleaddproduct,fetchproducts } = require('../controllers/sellercontroller')
 const {postsignuppage ,postloginpage,gethome,getAllProducts,buyerProfile,buyerlogout,getWishlist,addToWishlist,modifyWishlist, addToCart, getCart} = require('../controllers/buyerloginsignup')
-const {handleLoginAdmin} = require('../controllers/admincontroller');
+
 
 
 const storage = multer.diskStorage({
