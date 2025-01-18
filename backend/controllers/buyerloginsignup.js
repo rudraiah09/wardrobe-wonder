@@ -155,7 +155,7 @@ async function buyerlogout(req, res) {
 
 // Fetch wishlist for a buyer
 async function getWishlist(req, res) {
-  const { email } = req.query;
+  const { email, itemId } = req.query;
   console.log("hello");
   console.log(email + " at get wish");
 
@@ -248,44 +248,36 @@ async function getWishlist(req, res) {
   
   // Remove item from wishlist
   const modifyWishlist = async (req, res) => {
-    const { itemId } = req.params; // The ID of the item to remove
-    const token = req.cookies.buyerauthToken; // Get the buyer's authentication token
-  
-    if (!token) {
-      return res.status(401).json({ message: 'Unauthorized: Token not provided.' });
-    }
+    const { itemId , email } = req.query; // The ID of the item to remove
+    console.log(itemId,email + 252);
+    
   
     if (!itemId) {
       return res.status(400).json({ message: 'Invalid input: Item ID is required.' });
     }
   
     try {
-      // Verify and decode the token to extract the buyer ID
-      const decoded = jwt.verify(token, secretkey);
-      const buyerId = decoded.id;
+      
   
-      console.log(`Removing item ${itemId} for buyer ${buyerId}`);
-  
-      // Fetch the buyer's wishlist
-      const wishlist = await Wishlist.findOne({ buyerId });
+      
+      const wishlist = await Wishlist.findOne({ buyerId:email });
   
       if (!wishlist) {
         return res.status(404).json({ message: 'Wishlist not found.' });
       }
   
       // Check if the item exists in the wishlist
-      const itemIndex = wishlist.items.findIndex(item => item._id.toString() === itemId);
+      const itemIndex = wishlist.items.findIndex(item => item.productId.toString() === itemId);
       if (itemIndex === -1) {
         return res.status(404).json({ message: 'Item not found in wishlist.' });
       }
   
-      // Remove the item from the wishlist
       wishlist.items.splice(itemIndex, 1);
       await wishlist.save();
   
       res.status(200).json({ 
         message: 'Item successfully removed from the wishlist.', 
-        wishlist: wishlist.items // Return the updated wishlist
+        wishlist: wishlist.items 
       });
     } catch (error) {
       console.error('Error removing item from wishlist:', error);
@@ -380,7 +372,10 @@ const getCart = async (req, res) => {
     return res.status(500).json({ message: 'Error fetching wishlist products.', error: error.message });
   }
 };
-
+const addToCartfromw = (req,res)=>{
+        const {  email, itemId} =  req.query
+        console.log( itemId)
+}
 module.exports = {
     postsignuppage,
     postloginpage,
@@ -393,4 +388,5 @@ module.exports = {
     modifyWishlist,
     addToCart,
     getCart,
+    addToCartfromw
 };
