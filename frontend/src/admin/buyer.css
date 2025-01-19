@@ -1,23 +1,24 @@
-/* Main container for seller requests */
-.seller-requests-container {
-    margin: 0 auto;
+/* Main container for buyer details */
+.buyer-details-container {
+    margin: 0 auto; /* Center the container */
     padding: 20px;
     background: linear-gradient(180deg, #1c1f26, #2a2f3e);
-    color: #f0d18c;
-    min-height: 100vh;
+    color: #f0d18c; /* Gold text */
+    min-height: 100vh; /* Full viewport height */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: flex-start; /* Align content at the top */
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: hidden; /* Prevent scrollbars caused by white space */
     width: 100%;
+    margin-left: 300px;
   }
   
   /* Title styling */
-  .seller-requests h1 {
+  .buyer-details-container h2 {
     font-size: 2.5rem;
-    color: #ffd700;
+    color: #ffd700; /* Bright gold */
     margin-bottom: 30px;
     text-transform: uppercase;
     border-bottom: 2px solid #ffd700;
@@ -26,8 +27,8 @@
     letter-spacing: 2px;
   }
   
-  /* Container for all seller request cards */
-  .seller-requests {
+  /* Container for all buyer cards */
+  .buyers-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -36,8 +37,8 @@
     padding: 10px;
   }
   
-  /* Individual seller request card */
-  .seller-request-card {
+  /* Individual buyer card */
+  .buyer-card {
     background: linear-gradient(145deg, #2d343f, #202630);
     border-radius: 10px;
     padding: 20px;
@@ -49,48 +50,49 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
-  .seller-request-card:hover {
+  .buyer-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 15px 25px rgba(255, 215, 0, 0.3);
   }
   
-  /* Seller request information */
-  .seller-request-card p {
+  /* Buyer information */
+  .buyer-card p {
     margin: 8px 0;
     font-size: 1.1rem;
   }
   
-  .seller-request-card strong {
+  .buyer-card strong {
     color: #ffd27d;
   }
   
-  /* Action buttons */
-  .seller-request-card button {
-    background-color: #008000; /* Green for approve */
-    color: white;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 10px;
-    transition: background-color 0.3s ease;
+  /* Styling for empty state, loading, and error messages */
+  .empty-message,
+  .loading-message,
+  .error-message {
+    font-size: 1.3rem;
+    text-align: center;
+    margin-top: 20px;
   }
   
-  .seller-request-card button:last-child {
-    background-color: #e74c3c; /* Red for reject */
+  .error-message {
+    color: #e74c3c; /* Red for error */
   }
   
-  .seller-request-card button:hover {
-    opacity: 0.8;
+  .loading-message {
+    color: #f0d18c;
+  }
+  
+  .empty-message {
+    color: #b0b0b0; /* Subtle gray for empty state */
   }
   
   /* Responsive design for small screens */
   @media (max-width: 768px) {
-    .seller-requests-container {
+    .buyer-details-container {
       padding: 15px;
     }
   
-    .seller-request-card {
+    .buyer-card {
       width: 90%;
     }
   }

@@ -1,66 +1,52 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './AdminDashboard.css';
 
-function AdminDashboard() {
-    const [sellerRequests, setSellerRequests] = useState([]);
+const AdminDashboard = () => {
+  const [sellersCount, setSellersCount] = useState(0);
+  const [buyersCount, setBuyersCount] = useState(0);
+  const [productsCount, setProductsCount] = useState(0);
 
-    useEffect(() => {
-        async function fetchRequests() {
-            try {
-                const response = await axios.get('http://localhost:3020/sellerRequests');
-                setSellerRequests(response.data);
-            } catch (error) {
-                console.error('Error fetching seller requests:', error);
-            }
-        }
+  // Fetch data when component mounts
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch counts from the backend
+        const sellersRes = await axios.get('http://localhost:3020/sellerscount');
+        setSellersCount(sellersRes.data.count);
 
-        fetchRequests();
-    }, []);
+        const buyersRes = await axios.get('http://localhost:3020/buyerscount');
+        setBuyersCount(buyersRes.data.count);
 
-    const handleApprove = async (sellerId) => {
-        try {
-            await axios.post(`http://localhost:3020/sellerRequests/approve`, { sellerId });
-            setSellerRequests((prev) =>
-                prev.filter((request) => request.id !== sellerId)
-            );
-            alert('Seller request approved!');
-        } catch (error) {
-            console.error('Error approving seller request:', error);
-            alert('Failed to approve seller request.');
-        }
+        const productsRes = await axios.get('http://localhost:3020/productscount');
+        setProductsCount(productsRes.data.count);
+      } catch (error) {
+        console.error('Error fetching dashboard data', error);
+      }
     };
 
-    const handleReject = async (sellerId) => {
-        try {
-            await axios.post(`http://localhost:3020/sellerRequests/reject`, { sellerId });
-            setSellerRequests((prev) =>
-                prev.filter((request) => request.id !== sellerId)
-            );
-            alert('Seller request rejected!');
-        } catch (error) {
-            console.error('Error rejecting seller request:', error);
-            alert('Failed to reject seller request.');
-        }
-    };
+    fetchData();
+  }, []);
 
-    return (
-        <div className="admin-dashboard">
-            <h1>Admin Dashboard</h1>
-            
-            <h2>Seller Requests</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Seller ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-               
-            </table>
+  return (
+    <div className="dashboard-container">
+      <h1>Admin Dashboard</h1>
+      <div className="stats-container">
+        <div className="stat-card sellers-box">
+          <h2>{sellersCount}</h2>
+          <p>Sellers</p>
         </div>
-    );
-}
+        <div className="stat-card buyers-box">
+          <h2>{buyersCount}</h2>
+          <p>Buyers</p>
+        </div>
+        <div className="stat-card products-box">
+          <h2>{productsCount}</h2>
+          <p>Products</p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default AdminDashboard;

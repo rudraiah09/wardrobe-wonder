@@ -19,6 +19,7 @@ import BuyerWishlist from "./buyer/BuyerWishlist.js";
 import AdminLogin from "./admin/AdminLogin.jsx";
 import SellerRequestForm from "./admin/SellerRequestForm.js";
 import AdminDashboard from "./admin/AdminDashboard.js"; 
+import BuyerDetails  from "./admin/buyer.js";
 import AdminNavbar from "./admin/Adminnavbar.js";
 import SellerDetails from "./admin/seller.js";
 import SellerRequests1 from "./admin/SellerRequest.js";
@@ -31,10 +32,10 @@ function App() {
             <Route path="/" element={<Index1></Index1>}></Route>
             <Route path="/admin-login" element={<AdminLogin></AdminLogin>}></Route>
             <Route path="/admindashboard" element={<><AdminNavbar/></>}></Route>
-            <Route path="/admin/dashboard" element={<><AdminNavbar/></>}></Route>
+            <Route path="/admin/dashboard" element={<div style={{display:"flex", flexDirection:'row'}} ><AdminNavbar/><AdminDashboard></AdminDashboard></div>}></Route>
             <Route path="/admin/seller-requests" element={<div style={{display:"flex", flexDirection:'row'}} ><><AdminNavbar/><SellerRequests1></SellerRequests1></></div>}></Route>
             <Route path="/admin/sellers" element={<div style={{display:"flex", flexDirection:'row'}}><AdminNavbar/><SellerDetails></SellerDetails></div>}></Route>
-            <Route path="/admin/users" element={<><AdminNavbar/></>}></Route>
+            <Route path="/admin/buyers" element={<div style={{display:"flex", flexDirection:'row'}}><AdminNavbar/><BuyerDetails></BuyerDetails></div>}></Route>
             <Route path="/sellerRequest-Form" element={<SellerRequestForm></SellerRequestForm>}></Route>
             <Route path="/seller-login" element={<Login></Login>}></Route>
             <Route path="/sellerhome" element={<div style={{display:'flex'}}><SellerNavbar></SellerNavbar><SellerDashboard></SellerDashboard></div>}></Route>

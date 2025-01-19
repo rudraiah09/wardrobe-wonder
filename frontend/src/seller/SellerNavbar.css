@@ -1,5 +1,6 @@
 
 .sellernavbar-container {
+  position: fixed;
     width: 250px;
     height: 95vh;
     background-color: #222831;
