@@ -4,7 +4,8 @@ import axios from 'axios';
 import './BuyerCart.css';
 import Cookies from 'js-cookie';
 import { decodeToken } from 'react-jwt';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const BuyerCart = () => {
   const [cart, setCart] = useState([]);
   const [error, setError] = useState(null);
@@ -80,6 +81,7 @@ const BuyerCart = () => {
 
       if (response.status === 200) {
         setCart(cart.filter((item) => item._id !== itemId));
+        toast.success("Removed from Cart sucessfully" ,  {autoClose:1000})
       } else {
         console.error('Failed to remove item from cart:', response);
       }
@@ -98,7 +100,8 @@ const BuyerCart = () => {
       });
 
       if (response.status === 200) {
-        alert('Order placed successfully!');
+                  toast.success("Order placed sucessfully" , {autoClose:1000})
+        
         setCart([]); // Clear cart after placing order
       } else {
         console.error('Failed to place order:', response);
@@ -114,6 +117,7 @@ const BuyerCart = () => {
 
   return (
     <div className="buyer-cart">
+      <ToastContainer/>
       <Header />
       <h1>Cart</h1>
       {cart.length > 0 ? (

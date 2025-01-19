@@ -397,24 +397,24 @@ const removeFromCart = async (req, res) => {
 
     // Find the cart for the given buyer
     const cart = await Cart.findOne({ buyerId: email });
+
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found.' });
     }
 
-    // Filter out the product to be removed
     const updatedItems = cart.items.filter(item => item.productId !== productId);
 
     if (updatedItems.length === cart.items.length) {
       return res.status(404).json({ message: 'Product not found in cart.' });
     }
 
-    // Update the cart
     cart.items = updatedItems;
     cart.total = updatedItems.reduce((total, item) => total + item.price, 0);
 
-    // Save changes or delete cart if it's empty
     if (updatedItems.length === 0) {
-      await Cart.deleteOne({ buyerId: email }); // Corrected line
+
+      await Cart.deleteOne({ buyerId: email }); // Corrected lin
+
       return res.status(200).json({ message: 'Cart is now empty.' });
     } else {
       await cart.save();
@@ -426,8 +426,8 @@ const removeFromCart = async (req, res) => {
   }
 };
 
-// handle place orders
-const handlePlaceOrder=async (req, res) => {
+
+const handlePlaceOrder = async (req, res) => {
   try {
     const { email, items } = req.body;
 
@@ -435,10 +435,8 @@ const handlePlaceOrder=async (req, res) => {
       return res.status(400).json({ message: 'Email and items are required to place an order.' });
     }
 
-    // Calculate total price
     const totalAmount = items.reduce((total, item) => total + item.price * item.quantity, 0);
 
-    // Create a new order
     const order = new Order({
       buyerId: email,
       items: items.map((item) => ({
@@ -451,7 +449,27 @@ const handlePlaceOrder=async (req, res) => {
       totalAmount,
     });
 
-    await order.save();
+    await order.save(); 
+
+    await Cart.updateOne(
+      { buyerId: email },
+      {
+        $pull: {
+          items: {
+            productId: { $in: items.map((item) => item._id) },
+          },
+        },
+      }
+    );
+
+    const updatedCart = await Cart.findOne({ buyerId: email });
+    if (updatedCart) {
+      updatedCart.total = updatedCart.items.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0
+      );
+      await updatedCart.save();
+    }
 
     res.status(200).json({ message: 'Order placed successfully!', order });
   } catch (error) {

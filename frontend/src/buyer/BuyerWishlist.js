@@ -4,6 +4,8 @@ import axios from 'axios';
 import './BuyerWishlist.css';
 import Cookies from 'js-cookie';
 import { decodeToken } from 'react-jwt';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const BuyerWishlist = () => {
   const [wishlist, setWishlist] = useState([]);
@@ -18,12 +20,12 @@ const BuyerWishlist = () => {
       try {
         const decoded = decodeToken(token);
         console.log('Decoded email:', decoded.email);
-        setUser(decoded.email); // Update the state with decoded email
+        setUser(decoded.email); 
       } catch (error) {
         console.error('Error decoding token:', error);
       }
     }
-  }, []); // Run only once on component mount
+  }, []); 
 
   useEffect(() => {
     const fetchWishlist = async () => {
@@ -35,8 +37,8 @@ const BuyerWishlist = () => {
       try {
         console.log('Sending request to backend...');
         const response = await axios.get('http://localhost:3020/buyerwishlist', {
-          params: { email: user }, // Use the `user` state
-          withCredentials: true, // Include cookies for authentication
+          params: { email: user }, 
+          withCredentials: true, 
         });
 
         if (response.status === 200) {
@@ -80,8 +82,9 @@ const BuyerWishlist = () => {
 
       if (response.status === 200) {
         setWishlist((prevWishlist) => prevWishlist.filter((item) => item._id !== itemId));
-        alert('Item removed from wishlist.');
+        toast.success("removed from wishlist sucessfully" , {autoClose:1000})
       } else {
+
         alert('Failed to remove item from wishlist. Please try again.');
       }
     } catch (error) {
@@ -110,7 +113,7 @@ const BuyerWishlist = () => {
 
       if (response.status === 200) {
         setWishlist((prevWishlist) => prevWishlist.filter((item) => item._id !== itemId));
-        alert('Item removed from wishlist.');
+        toast.success("Add to cart sucessfully" ,  {autoClose:1000})
       } else {
         alert('Failed to remove item from wishlist. Please try again.');
       }
@@ -129,6 +132,7 @@ const BuyerWishlist = () => {
   return (
     <div className="buyer-wishlist">
       <Header />
+      <ToastContainer/>
       <h1>Wishlist</h1>
 
       {wishlist.length > 0 ? (

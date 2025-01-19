@@ -1,0 +1,71 @@
+.dashboard-container {
+    background-color: #393e46;
+    color: #eeeeee;
+    padding: 20px;
+    width: 100%;
+    margin-left: 300px;
+  }
+  
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #ffd369;
+    margin-bottom: 40px;
+  }
+  
+  .stats-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .stat-card {
+    background-color: #222831;
+    color: #ffd369;
+    padding: 20px;
+    border-radius: 10px;
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  .stat-card h2 {
+    font-size: 2rem;
+    margin: 0;
+    font-weight: bold;
+  }
+  
+  .stat-card p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+  }
+  
+  /* Individual box styles */
+  .sellers-box {
+    background-color: #222831; /* Greenish tone */
+  }
+  
+  .buyers-box {
+    background-color: #222831; /* Pinkish tone */
+  }
+  
+  .products-box {
+    background-color: #222831; /* Blue tone */
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
