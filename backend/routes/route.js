@@ -12,6 +12,15 @@ const {handleaddproduct,fetchproducts } = require('../controllers/sellercontroll
 const {postsignuppage ,postloginpage,gethome,getAllProducts,buyerProfile,buyerlogout,getWishlist,addToWishlist,modifyWishlist, addToCart, getCart} = require('../controllers/buyerloginsignup')
 
 
+const {handleLoginAdmin,fetchsellers} = require('../controllers/admincontroller')
+const sellerRequestController =require('../controllers/sellerRequestController')
+
+const multer = require('multer');
+const path = require('path')
+const {handleloginseller ,handleaddproduct,fetchproducts } = require('../controllers/sellercontroller')
+const {postsignuppage ,postloginpage,gethome,getAllProducts,buyerProfile,buyerlogout,getWishlist,addToWishlist,modifyWishlist,handlePlaceOrder, addToCart, getCart,addToCartfromw,removeFromCart} = require('../controllers/buyerloginsignup')
+
+
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -58,9 +67,11 @@ router.get('/buyercart',getCart)
 router.post('/buyerhome1', addToWishlist);
 
 // Route for removing an item from the wishlist (DELETE request)
-router.delete('/buyerwishlist/:itemId', modifyWishlist);
+router.delete('/removefrombuyerwishlist', modifyWishlist);
+router.post('/addtocartfromw',addToCartfromw );
 router.post('/buyerhome2', addToCart);
-
+router.delete('/removefromcart',removeFromCart);
+router.post("/placeorder",handlePlaceOrder)
 //seller Request Routes
 
 
