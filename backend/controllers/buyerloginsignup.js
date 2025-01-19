@@ -5,6 +5,7 @@ const Product = require('../models/productSchema');
 const Wishlist = require('../models/wishlistSchema');
 const Cart = require('../models/cartSchema');
 const buyer = require("../models/buyerSchema");
+const Order = require('../models/orderSchema');
 const secretkey = process.env.SECRET_KEY || "venkat"; // Use an environment variable for the secret key
 
 // POST Signup Route (for handling form submission from React)
@@ -91,7 +92,6 @@ async function gethome(req, res) {
     try {
         // Verify the JWT token
         const decoded = jwt.verify(token, secretkey);
-        // Fetch user-specific data (e.g., to-do list) from DB
         const todos = await ToDo.find({ email: decoded.email }); // Modify as per your schema
         return res.status(200).json({ user: decoded, todos: todos });
     } catch (error) {
@@ -155,7 +155,7 @@ async function buyerlogout(req, res) {
 
 // Fetch wishlist for a buyer
 async function getWishlist(req, res) {
-  const { email } = req.query;
+  const { email, itemId } = req.query;
   console.log("hello");
   console.log(email + " at get wish");
 
@@ -248,44 +248,36 @@ async function getWishlist(req, res) {
   
   // Remove item from wishlist
   const modifyWishlist = async (req, res) => {
-    const { itemId } = req.params; // The ID of the item to remove
-    const token = req.cookies.buyerauthToken; // Get the buyer's authentication token
-  
-    if (!token) {
-      return res.status(401).json({ message: 'Unauthorized: Token not provided.' });
-    }
+    const { itemId , email } = req.query; // The ID of the item to remove
+    console.log(itemId,email + 252);
+    
   
     if (!itemId) {
       return res.status(400).json({ message: 'Invalid input: Item ID is required.' });
     }
   
     try {
-      // Verify and decode the token to extract the buyer ID
-      const decoded = jwt.verify(token, secretkey);
-      const buyerId = decoded.id;
+      
   
-      console.log(`Removing item ${itemId} for buyer ${buyerId}`);
-  
-      // Fetch the buyer's wishlist
-      const wishlist = await Wishlist.findOne({ buyerId });
+      
+      const wishlist = await Wishlist.findOne({ buyerId:email });
   
       if (!wishlist) {
         return res.status(404).json({ message: 'Wishlist not found.' });
       }
   
       // Check if the item exists in the wishlist
-      const itemIndex = wishlist.items.findIndex(item => item._id.toString() === itemId);
+      const itemIndex = wishlist.items.findIndex(item => item.productId.toString() === itemId);
       if (itemIndex === -1) {
         return res.status(404).json({ message: 'Item not found in wishlist.' });
       }
   
-      // Remove the item from the wishlist
       wishlist.items.splice(itemIndex, 1);
       await wishlist.save();
   
       res.status(200).json({ 
         message: 'Item successfully removed from the wishlist.', 
-        wishlist: wishlist.items // Return the updated wishlist
+        wishlist: wishlist.items 
       });
     } catch (error) {
       console.error('Error removing item from wishlist:', error);
@@ -342,27 +334,35 @@ const addToCart = async (req, res) => {
     res.status(500).json({ message: 'Error adding product to cart' });
   }
 };
-//fetch cart
 const getCart = async (req, res) => {
   const { email } = req.query;
   console.log(email + " at get cart");
 
   try {
-    // Fetch the wishlist specific to the buyer (email)
+    // Fetch the cart specific to the buyer (email)
     const cart = await Cart.findOne({ buyerId: email });
     
     if (!cart || !cart.items || cart.items.length === 0) {
-      return res.status(404).json({ message: 'Wishlist is empty or not found for this user.' });
+      return res.status(404).json({ message: 'Cart is empty or not found for this user.' });
     }
 
-    console.log(cart + " this is wishlist");
+    console.log(cart + " this is cart");
 
-    // If items exist, proceed to fetch product details
-    const productIds = cart.items.map(item => item.productId);
-    console.log(productIds + "this is product")
+    // Extract productIds and their quantities
+    const productQuantities = cart.items.reduce((acc, item) => {
+      acc[item.productId] = item.quantity; // Map productId to its quantity
+      return acc;
+    }, {});
+
+    console.log(productQuantities + " product quantities");
+
+    // Fetch product details from the Product collection
+    const productIds = Object.keys(productQuantities);
+    console.log(productIds + " these are product IDs");
 
     const products = await Product.find({ _id: { $in: productIds } });
-    
+
+    // Map over products and add quantity from cart
     const updatedProducts = products.map(product => {
       console.log("Product image field:", product.image);
       const imagePath = product.image;
@@ -370,14 +370,94 @@ const getCart = async (req, res) => {
 
       return {
         ...product.toObject(),
+        quantity: productQuantities[product._id], // Add quantity from the cart
         image: product.image ? `${req.protocol}://${req.get('host')}${imagePath}` : null,
       };
     });
-     console.log("end")
+
+    console.log("end");
     return res.status(200).json({ updatedProducts });
   } catch (error) {
-    console.error('Error fetching wishlist products:', error);
-    return res.status(500).json({ message: 'Error fetching wishlist products.', error: error.message });
+    console.error('Error fetching cart products:', error);
+    return res.status(500).json({ message: 'Error fetching cart products.', error: error.message });
+  }
+};
+
+const addToCartfromw = (req,res)=>{
+        const {  email, itemId} =  req.query
+        console.log( itemId)
+}
+// Remove product from cart
+const removeFromCart = async (req, res) => {
+  try {
+    const { email, productId } = req.query;
+
+    if (!email || !productId) {
+      return res.status(400).json({ message: 'Buyer ID and Product ID are required.' });
+    }
+
+    // Find the cart for the given buyer
+    const cart = await Cart.findOne({ buyerId:email });
+    if (!cart) {
+      return res.status(404).json({ message: 'Cart not found.' });
+    }
+
+    // Filter out the product to be removed
+    const updatedItems = cart.items.filter(item => item.productId !== productId);
+
+    if (updatedItems.length === cart.items.length) {
+      return res.status(404).json({ message: 'Product not found in cart.' });
+    }
+
+    // Update the cart
+    cart.items = updatedItems;
+    cart.total = updatedItems.reduce((total, item) => total + item.price, 0);
+
+    // Save changes or delete cart if it's empty
+    if (updatedItems.length === 0) {
+      await Cart.deleteOne({ buyerId });
+      return res.status(200).json({ message: 'Cart is now empty.' });
+    } else {
+      await cart.save();
+      return res.status(200).json({ message: 'Product removed from cart successfully.', cart });
+    }
+  } catch (error) {
+    console.error('Error removing product from cart:', error);
+    return res.status(500).json({ message: 'Error removing product from cart.', error: error.message });
+  }
+};
+
+// handle place orders
+const handlePlaceOrder=async (req, res) => {
+  try {
+    const { email, items } = req.body;
+
+    if (!email || !items || items.length === 0) {
+      return res.status(400).json({ message: 'Email and items are required to place an order.' });
+    }
+
+    // Calculate total price
+    const totalAmount = items.reduce((total, item) => total + item.price * item.quantity, 0);
+
+    // Create a new order
+    const order = new Order({
+      buyerId: email,
+      items: items.map((item) => ({
+        productId: item._id,
+        title: item.title,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.image,
+      })),
+      totalAmount,
+    });
+
+    await order.save();
+
+    res.status(200).json({ message: 'Order placed successfully!', order });
+  } catch (error) {
+    console.error('Error placing order:', error);
+    res.status(500).json({ message: 'Error placing order.', error: error.message });
   }
 };
 
@@ -393,4 +473,7 @@ module.exports = {
     modifyWishlist,
     addToCart,
     getCart,
+    addToCartfromw,
+    removeFromCart,
+    handlePlaceOrder
 };

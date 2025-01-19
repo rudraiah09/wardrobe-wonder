@@ -10,9 +10,6 @@ const BuyerHome = () => {
   const [loading, setLoading] = useState(true); // Adding a loading state
   const [error, setError] = useState(null); // Adding an error state
   const [user, setUser] = useState(''); // Declare the user state
-  var userid = '';
-  var userid2 = '';
-
 
   useEffect(() => {
     // Fetch user data (e.g., buyerId) from local storage or token
@@ -23,8 +20,6 @@ const BuyerHome = () => {
              try {
                const decoded = decodeToken(token);
                console.log(decoded.email)
-               userid = decoded.email
-               console.log(userid)
              setUser(decoded.email)
 
              console.log(user)}
@@ -85,31 +80,20 @@ const BuyerHome = () => {
 };
 
 const handleAddToCart = async (product) => {
-  const token2  = Cookies.get('buyerauthToken');
-  if(token2){
-    try {
-      const decoded = decodeToken(token2);
-      console.log(decoded.email)
-      userid2 = decoded.email
-      console.log(userid2)
-}
-    catch{
-     console.log(error)
-    }
+  console.log('User object:', user);
+  if (!user) {
+      alert('Please log in to add items to your cart.');
+      return;
   }
- if(!userid2){
-  alert("failed to add to cart");
-  return
- }
 
-  console.log('User ID:', userid2); // Verify user._id value
+  console.log('User ID:', user); // Verify user._id value
   console.log(product._id);
 
   try {
       const response = await axios.post(
           'http://localhost:3020/buyerhome2',
           {
-              buyerId: userid2,
+              buyerId: user,
               productId: product._id,
               title: product.title,
               price: product.price,
