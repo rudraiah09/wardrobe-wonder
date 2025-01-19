@@ -4,6 +4,8 @@ import './BuyerHome.css'; // Importing the CSS file
 import Header from './Header';
 import Cookies from 'js-cookie';
 import {decodeToken} from 'react-jwt'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const BuyerHome = () => {
   const [products, setProducts] = useState([]);
@@ -71,7 +73,7 @@ const BuyerHome = () => {
         );
 
         if (response.status === 200) {
-            alert('Product added to wishlist successfully');
+          toast.success("Added to wishlist sucessfully" , {autoClose:1000})
         }
     } catch (error) {
         console.error('Error adding to wishlist:', error);
@@ -106,7 +108,7 @@ const handleAddToCart = async (product) => {
       );
 
       if (response.status === 200) {
-          alert('Product added to cart successfully');
+        toast.success("Added to Cart sucessfully" , {autoClose:1000})
       }
   } catch (error) {
       console.error('Error adding to cart:', error);
@@ -125,6 +127,7 @@ const handleAddToCart = async (product) => {
 
   return (
     <div className="buyer-home">
+    <ToastContainer/>
       {/* Header */}
       <Header />
 
