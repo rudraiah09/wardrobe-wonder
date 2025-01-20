@@ -14,6 +14,7 @@ import BuyerProfile from "./buyer/BuyerProfile";
 import BuyerCart from "./buyer/BuyerCart.js";
 import BuyerOrders from "./buyer/BuyerOrders.js";
 import BuyerWishlist from "./buyer/BuyerWishlist.js";
+import OrdersList from "./admin/OrdersList.js";
 
 
 import AdminLogin from "./admin/AdminLogin.jsx";
@@ -36,6 +37,7 @@ function App() {
             <Route path="/admin/seller-requests" element={<div style={{display:"flex", flexDirection:'row'}} ><><AdminNavbar/><SellerRequests1></SellerRequests1></></div>}></Route>
             <Route path="/admin/sellers" element={<div style={{display:"flex", flexDirection:'row'}}><AdminNavbar/><SellerDetails></SellerDetails></div>}></Route>
             <Route path="/admin/buyers" element={<div style={{display:"flex", flexDirection:'row'}}><AdminNavbar/><BuyerDetails></BuyerDetails></div>}></Route>
+            <Route path="/admin/Orders" element={<div style={{display:"flex", flexDirection:'row'}}><AdminNavbar/><OrdersList></OrdersList></div>}></Route>
             <Route path="/sellerRequest-Form" element={<SellerRequestForm></SellerRequestForm>}></Route>
             <Route path="/seller-login" element={<Login></Login>}></Route>
             <Route path="/sellerhome" element={<div style={{display:'flex'}}><SellerNavbar></SellerNavbar><SellerDashboard></SellerDashboard></div>}></Route>

@@ -44,7 +44,7 @@ const BuyerDetails = () => {
 
   return (
     <div className="buyer-details-container">
-      <h2>Buyer Details</h2>
+      <h2>Order Details</h2>
       {loading ? (
         <p className="loading-message">Loading...</p>
       ) : error ? (
@@ -54,27 +54,12 @@ const BuyerDetails = () => {
           {buyers.map((buyer) => (
             <div key={buyer._id} className="buyer-card" style={{ width: "60%" }}>
               <p>
-                <strong>Name:</strong> {buyer.name}
+                <strong>Email</strong> {buyer.name}
               </p>
               <p>
-                <strong>Email:</strong> {buyer.email}
+                <strong>OrderId:</strong> {buyer.email}
               </p>
               
-              <button
-                onClick={() => fetchOrders(buyer._id)} // Fix: Wrap fetchOrders in an arrow function
-                className="order-button"
-                style={{
-                  backgroundColor: "blue",
-                  color: "white",
-                  padding: "5px 10px",
-                  marginRight: "10px",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                }}
-              >
-                View Orders
-              </button>
               <button
                 onClick={(e) => deleteBuyer(e, buyer._id)}
                 className="delete-button"

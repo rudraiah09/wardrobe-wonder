@@ -94,34 +94,38 @@ const BuyerWishlist = () => {
       alert(errorMessage);
     }
   };
-  const handleAddtocart = async (itemId) => {
+  const  handleAddtocart = async (item) => {
+    console.log('User object:', user);
     if (!user) {
-      alert('User is not logged in.');
-      return;
+        alert('Please log in to add items to your cart.');
+        return;
     }
-
-    
-    const confirmDelete = window.confirm('Are you sure you want to add element to cart?');
-    if (!confirmDelete) return;
-
+  
+    console.log('User ID:', user); // Verify user._id value
+    console.log(item._id);
+  
     try {
-      console.log('add to cart:', itemId, 'for user:', user);
-
-      const response = await axios.post('http://localhost:3020/addtocartfromw', {
-        params: { itemId:itemId, email: user }, 
-      });
-
-      if (response.status === 200) {
-        setWishlist((prevWishlist) => prevWishlist.filter((item) => item._id !== itemId));
-        toast.success("Add to cart sucessfully" ,  {autoClose:1000})
-      } else {
-        alert('Failed to remove item from wishlist. Please try again.');
-      }
+        const response = await axios.post(
+            'http://localhost:3020/buyerhome2',
+            {
+                buyerId: user,
+                productId: item._id,
+                title: item.title,
+                price: item.price,
+                image: item.image,
+                quantity:1
+            },
+            {
+                withCredentials: true, // Ensure cookies are sent
+            }
+        );
+  
+        if (response.status === 200) {
+          toast.success("Added to Cart sucessfully" , {autoClose:1000})
+        }
     } catch (error) {
-      console.error('Error removing item from wishlist:', error);
-
-      const errorMessage = error.response?.data?.message || 'Failed to remove item from wishlist.';
-      alert(errorMessage);
+        console.error('Error adding to cart:', error);
+        alert('Failed to add product to cart.');
     }
   };
 
@@ -151,7 +155,7 @@ const BuyerWishlist = () => {
               </button>
               <button
                 className="btn remove-btn"
-                onClick={() => handleAddtocart(item._id)}
+                onClick={() => handleAddtocart(item)}
               >
                 Add to cart
               </button>

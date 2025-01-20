@@ -65,7 +65,17 @@ const AdminNavbar = () => {
                             <path d="M21 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2" />
                             <circle cx="8.5" cy="7" r="4" />
                         </svg>
-                        <Link to="/admin/buyers" className="sellernavbar-link">Buyer</Link>
+                        <Link to="/admin/Orders" className="sellernavbar-link">Buyer</Link>
+                    </div>
+                </li>
+                <li>
+                    <div className="sellernavbardiv" style={{ display: "flex" }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="sellernavbar-icon" style={{ width: '50px', height: '50px', color: '#ffd369' }}>
+                            <path d="M16 3.13a4 4 0 010 7.75" />
+                            <path d="M21 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2" />
+                            <circle cx="8.5" cy="7" r="4" />
+                        </svg>
+                        <Link to="/admin/Orders" className="sellernavbar-link">Orders List</Link>
                     </div>
                 </li>
             </ul>

@@ -48,8 +48,8 @@ const BuyerCart = () => {
       } catch (error) {
         console.error('Error fetching cart:', error);
 
-        if (error.response && error.response.status === 401) {
-          setError('Unauthorized: Please log in to view your cart.');
+        if (error.response && error.response.status === 404) {
+            setCart([])
         } else {
           setError('Failed to fetch cart. Please try again later.');
         }
