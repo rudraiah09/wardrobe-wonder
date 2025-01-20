@@ -31,6 +31,15 @@ const BuyerDetails = () => {
       alert("Failed to delete buyer. Please try again.");
     }
   };
+  const fetchorders = async(id) =>{
+    try {
+      await axios.get('http://localhost:3020/adminorders/' , {params :{userid:id}, withCredentials: true });
+     
+    } catch (err) {
+      console.error("Error deleting buyer:", err.message);
+      alert("Failed to delete buyer. Please try again.");
+    }
+  }
   
 
   return (
@@ -41,9 +50,9 @@ const BuyerDetails = () => {
       ) : error ? (
         <p className="error-message">Error: {error}</p>
       ) : buyers.length > 0 ? (
-        <div className="buyers-list" style={{ display: "flex", flexDirection: "column", marginLeft: "500px" }}>
+        <div className="buyers-list" style={{ display: "flex", flexDirection: "column", marginLeft: "500px" }} >
           {buyers.map((buyer) => (
-            <div key={buyer._id} className="buyer-card" style={{ width: "60%" }}>
+            <div key={buyer._id} className="buyer-card" style={{ width: "60%" }} onClick={fetchorders(buyer._id)}>
               <p>
                 <strong>Name:</strong> {buyer.name}
               </p>
