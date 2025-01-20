@@ -390,12 +390,14 @@ const addToCartfromw = (req,res)=>{
 const removeFromCart = async (req, res) => {
   try {
     const { email, productId } = req.query;
-
+    console.log(email + "394");
     if (!email || !productId) {
-      return res.status(400).json({ message: 'Buyer ID and Product ID are required.' });
+      return res.status(400).json({ message: 'Buyer email and Product ID are required.' });
     }
 
-    const cart = await Cart.findOne({ buyerId:email });
+    // Find the cart for the given buyer
+    const cart = await Cart.findOne({ buyerId: email });
+
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found.' });
     }
@@ -410,7 +412,9 @@ const removeFromCart = async (req, res) => {
     cart.total = updatedItems.reduce((total, item) => total + item.price, 0);
 
     if (updatedItems.length === 0) {
-      await Cart.deleteOne({ buyerId:email });
+
+      await Cart.deleteOne({ buyerId: email }); // Corrected lin
+
       return res.status(200).json({ message: 'Cart is now empty.' });
     } else {
       await cart.save();
@@ -474,6 +478,24 @@ const handlePlaceOrder = async (req, res) => {
   }
 };
 
+//fetch orders
+
+const fetchorder=async (req, res) => {
+  const { email } = req.query;
+  console.log(email+"467")
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+
+  try {
+    const orders = await Order.find({ buyerId: email }); // Replace `Order` with your orders collection/model
+    console.log(orders +"474")
+    res.status(200).json({ orders });
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
 
 module.exports = {
     postsignuppage,
@@ -489,5 +511,6 @@ module.exports = {
     getCart,
     addToCartfromw,
     removeFromCart,
-    handlePlaceOrder
+    handlePlaceOrder,
+    fetchorder
 };

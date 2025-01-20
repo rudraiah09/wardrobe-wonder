@@ -5,12 +5,10 @@ const {handleLoginAdmin,fetchsellers,deleteSeller,fetchBuyers,deleteBuyer,getSel
 
 const {approveSellerRequest ,createSellerRequest,getSellerRequests,rejectSellerRequest} =require('../controllers/sellerRequestController')
 
-
-
 const multer = require('multer');
 const path = require('path')
 const {handleloginseller ,handleaddproduct,fetchproducts } = require('../controllers/sellercontroller')
-const {postsignuppage ,postloginpage,gethome,getAllProducts,buyerProfile,buyerlogout,getWishlist,addToWishlist,modifyWishlist,handlePlaceOrder, addToCart, getCart,addToCartfromw,removeFromCart} = require('../controllers/buyerloginsignup')
+const {postsignuppage ,postloginpage,gethome,getAllProducts,buyerProfile,buyerlogout,getWishlist,addToWishlist,modifyWishlist,fetchorder,handlePlaceOrder, addToCart, getCart,addToCartfromw,removeFromCart} = require('../controllers/buyerloginsignup')
 
 
 
@@ -63,7 +61,8 @@ router.delete('/removefrombuyerwishlist', modifyWishlist);
 router.post('/addtocartfromw',addToCartfromw );
 router.post('/buyerhome2', addToCart);
 router.delete('/removefromcart',removeFromCart);
-router.post("/placeorder",handlePlaceOrder)
+router.post("/placeorder",handlePlaceOrder);
+router.get('/buyerorders',fetchorder);
 //seller Request Routes
 
 
