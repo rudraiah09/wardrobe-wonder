@@ -384,8 +384,11 @@ const getCart = async (req, res) => {
 };
 
 const addToCartfromw = (req,res)=>{
-        const {  email, itemId} =  req.query
-        console.log( itemId)
+        const {email,itemId} =  req.params
+        console.log(388)
+        console.log( itemId + 388);
+        console.log( email + 388);
+
 }
 const removeFromCart = async (req, res) => {
   try {

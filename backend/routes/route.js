@@ -58,7 +58,7 @@ router.post('/buyerhome1', addToWishlist);
 
 // Route for removing an item from the wishlist (DELETE request)
 router.delete('/removefrombuyerwishlist', modifyWishlist);
-router.post('/addtocartfromw',addToCartfromw );
+router.post('/addtocartfromw/:itemId/:email',addToCartfromw );
 router.post('/buyerhome2', addToCart);
 router.delete('/removefromcart',removeFromCart);
 router.post("/placeorder",handlePlaceOrder);
