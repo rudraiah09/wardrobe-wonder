@@ -1,22 +1,19 @@
 const express = require('express');
 const router = express.Router();
 
-const {handleloginseller } = require('../controllers/sellercontroller')
 const {handleLoginAdmin,fetchsellers,deleteSeller,fetchBuyers,deleteBuyer,getSellersCount,getBuyersCount,getProductsCount} = require('../controllers/admincontroller')
 
 const {approveSellerRequest ,createSellerRequest,getSellerRequests,rejectSellerRequest} =require('../controllers/sellerRequestController')
 
 const multer = require('multer');
 const path = require('path')
-const {handleaddproduct,fetchproducts } = require('../controllers/sellercontroller')
-const {postsignuppage ,postloginpage,gethome,getAllProducts,buyerProfile,buyerlogout,getWishlist,addToWishlist,modifyWishlist, addToCart, getCart} = require('../controllers/buyerloginsignup')
 
 
-const {handleLoginAdmin,fetchsellers} = require('../controllers/admincontroller')
+
+
+
 const sellerRequestController =require('../controllers/sellerRequestController')
 
-const multer = require('multer');
-const path = require('path')
 const {handleloginseller ,handleaddproduct,fetchproducts } = require('../controllers/sellercontroller')
 const {postsignuppage ,postloginpage,gethome,getAllProducts,buyerProfile,buyerlogout,getWishlist,addToWishlist,modifyWishlist,handlePlaceOrder, addToCart, getCart,addToCartfromw,removeFromCart} = require('../controllers/buyerloginsignup')
 
