@@ -65,7 +65,7 @@ const AdminNavbar = () => {
                             <path d="M21 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2" />
                             <circle cx="8.5" cy="7" r="4" />
                         </svg>
-                        <Link to="/admin/buyers" className="sellernavbar-link">Buyer</Link>
+                        <Link to="/admin/Orders" className="sellernavbar-link">Buyer</Link>
                     </div>
                 </li>
                 <li>
@@ -75,9 +75,10 @@ const AdminNavbar = () => {
                             <path d="M21 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2" />
                             <circle cx="8.5" cy="7" r="4" />
                         </svg>
-                        <Link to="/admin/buyers" className="sellernavbar-link">Order List</Link>
+                        <Link to="/admin/Orders" className="sellernavbar-link">Orders List</Link>
                     </div>
                 </li>
+                
             </ul>
 
             <div className="sellernavbar-footer">

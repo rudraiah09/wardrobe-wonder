@@ -384,38 +384,40 @@ const getCart = async (req, res) => {
 };
 
 const addToCartfromw = (req,res)=>{
-        const {  email, itemId} =  req.query
-        console.log( itemId)
+        const {email,itemId} =  req.params
+        console.log(388)
+        console.log( itemId + 388);
+        console.log( email + 388);
+
 }
-// Remove product from cart
 const removeFromCart = async (req, res) => {
   try {
     const { email, productId } = req.query;
-
+    console.log(email + "394");
     if (!email || !productId) {
-      return res.status(400).json({ message: 'Buyer ID and Product ID are required.' });
+      return res.status(400).json({ message: 'Buyer email and Product ID are required.' });
     }
 
     // Find the cart for the given buyer
-    const cart = await Cart.findOne({ buyerId:email });
+    const cart = await Cart.findOne({ buyerId: email });
+
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found.' });
     }
 
-    // Filter out the product to be removed
     const updatedItems = cart.items.filter(item => item.productId !== productId);
 
     if (updatedItems.length === cart.items.length) {
       return res.status(404).json({ message: 'Product not found in cart.' });
     }
 
-    // Update the cart
     cart.items = updatedItems;
     cart.total = updatedItems.reduce((total, item) => total + item.price, 0);
 
-    // Save changes or delete cart if it's empty
     if (updatedItems.length === 0) {
-      await Cart.deleteOne({ buyerId });
+
+      await Cart.deleteOne({ buyerId: email }); // Corrected lin
+
       return res.status(200).json({ message: 'Cart is now empty.' });
     } else {
       await cart.save();
@@ -427,8 +429,8 @@ const removeFromCart = async (req, res) => {
   }
 };
 
-// handle place orders
-const handlePlaceOrder=async (req, res) => {
+
+const handlePlaceOrder = async (req, res) => {
   try {
     const { email, items } = req.body;
 
@@ -436,10 +438,8 @@ const handlePlaceOrder=async (req, res) => {
       return res.status(400).json({ message: 'Email and items are required to place an order.' });
     }
 
-    // Calculate total price
     const totalAmount = items.reduce((total, item) => total + item.price * item.quantity, 0);
 
-    // Create a new order
     const order = new Order({
       buyerId: email,
       items: items.map((item) => ({
@@ -452,7 +452,27 @@ const handlePlaceOrder=async (req, res) => {
       totalAmount,
     });
 
-    await order.save();
+    await order.save(); 
+
+    await Cart.updateOne(
+      { buyerId: email },
+      {
+        $pull: {
+          items: {
+            productId: { $in: items.map((item) => item._id) },
+          },
+        },
+      }
+    );
+
+    const updatedCart = await Cart.findOne({ buyerId: email });
+    if (updatedCart) {
+      updatedCart.total = updatedCart.items.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0
+      );
+      await updatedCart.save();
+    }
 
     res.status(200).json({ message: 'Order placed successfully!', order });
   } catch (error) {
@@ -460,6 +480,25 @@ const handlePlaceOrder=async (req, res) => {
     res.status(500).json({ message: 'Error placing order.', error: error.message });
   }
 };
+
+//fetch orders
+
+const fetchorder=async (req, res) => {
+  const { email } = req.query;
+  console.log(email+"467")
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+
+  try {
+    const orders = await Order.find({ buyerId: email }); // Replace `Order` with your orders collection/model
+    console.log(orders +"474")
+    res.status(200).json({ orders });
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
 
 module.exports = {
     postsignuppage,
@@ -475,5 +514,6 @@ module.exports = {
     getCart,
     addToCartfromw,
     removeFromCart,
-    handlePlaceOrder
+    handlePlaceOrder,
+    fetchorder
 };

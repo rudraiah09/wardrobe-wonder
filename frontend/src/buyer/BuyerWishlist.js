@@ -4,6 +4,8 @@ import axios from 'axios';
 import './BuyerWishlist.css';
 import Cookies from 'js-cookie';
 import { decodeToken } from 'react-jwt';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const BuyerWishlist = () => {
   const [wishlist, setWishlist] = useState([]);
@@ -18,12 +20,12 @@ const BuyerWishlist = () => {
       try {
         const decoded = decodeToken(token);
         console.log('Decoded email:', decoded.email);
-        setUser(decoded.email); // Update the state with decoded email
+        setUser(decoded.email); 
       } catch (error) {
         console.error('Error decoding token:', error);
       }
     }
-  }, []); // Run only once on component mount
+  }, []); 
 
   useEffect(() => {
     const fetchWishlist = async () => {
@@ -35,8 +37,8 @@ const BuyerWishlist = () => {
       try {
         console.log('Sending request to backend...');
         const response = await axios.get('http://localhost:3020/buyerwishlist', {
-          params: { email: user }, // Use the `user` state
-          withCredentials: true, // Include cookies for authentication
+          params: { email: user }, 
+          withCredentials: true, 
         });
 
         if (response.status === 200) {
@@ -80,8 +82,9 @@ const BuyerWishlist = () => {
 
       if (response.status === 200) {
         setWishlist((prevWishlist) => prevWishlist.filter((item) => item._id !== itemId));
-        alert('Item removed from wishlist.');
+        toast.success("removed from wishlist sucessfully" , {autoClose:1000})
       } else {
+
         alert('Failed to remove item from wishlist. Please try again.');
       }
     } catch (error) {
@@ -91,34 +94,38 @@ const BuyerWishlist = () => {
       alert(errorMessage);
     }
   };
-  const handleAddtocart = async (itemId) => {
+  const  handleAddtocart = async (item) => {
+    console.log('User object:', user);
     if (!user) {
-      alert('User is not logged in.');
-      return;
+        alert('Please log in to add items to your cart.');
+        return;
     }
-
-    
-    const confirmDelete = window.confirm('Are you sure you want to add element to cart?');
-    if (!confirmDelete) return;
-
+  
+    console.log('User ID:', user); // Verify user._id value
+    console.log(item._id);
+  
     try {
-      console.log('add to cart:', itemId, 'for user:', user);
-
-      const response = await axios.post('http://localhost:3020/addtocartfromw', {
-        params: { itemId:itemId, email: user }, 
-      });
-
-      if (response.status === 200) {
-        setWishlist((prevWishlist) => prevWishlist.filter((item) => item._id !== itemId));
-        alert('Item removed from wishlist.');
-      } else {
-        alert('Failed to remove item from wishlist. Please try again.');
-      }
+        const response = await axios.post(
+            'http://localhost:3020/buyerhome2',
+            {
+                buyerId: user,
+                productId: item._id,
+                title: item.title,
+                price: item.price,
+                image: item.image,
+                quantity:1
+            },
+            {
+                withCredentials: true, // Ensure cookies are sent
+            }
+        );
+  
+        if (response.status === 200) {
+          toast.success("Added to Cart sucessfully" , {autoClose:1000})
+        }
     } catch (error) {
-      console.error('Error removing item from wishlist:', error);
-
-      const errorMessage = error.response?.data?.message || 'Failed to remove item from wishlist.';
-      alert(errorMessage);
+        console.error('Error adding to cart:', error);
+        alert('Failed to add product to cart.');
     }
   };
 
@@ -129,6 +136,7 @@ const BuyerWishlist = () => {
   return (
     <div className="buyer-wishlist">
       <Header />
+      <ToastContainer/>
       <h1>Wishlist</h1>
 
       {wishlist.length > 0 ? (
@@ -147,7 +155,7 @@ const BuyerWishlist = () => {
               </button>
               <button
                 className="btn remove-btn"
-                onClick={() => handleAddtocart(item._id)}
+                onClick={() => handleAddtocart(item)}
               >
                 Add to cart
               </button>
