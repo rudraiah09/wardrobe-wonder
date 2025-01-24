@@ -43,11 +43,12 @@ async function getSellerRequests(req, res) {
 
 async function approveSellerRequest(req, res)  {
     try {
-        const { id } = req.params;
+        const { sellerId } = req.body;
+    
         
-   console.log(id);
+   console.log(sellerId);
         // Find the seller request by ID
-        const request = await SellerRequest.findById(id);
+        const request = await SellerRequest.findById(sellerId);
         // Mark the seller request as approved
       
 
@@ -64,7 +65,7 @@ async function approveSellerRequest(req, res)  {
         await newSeller.save();
 
         // Optionally, you can delete the seller request if you no longer need it
-        await SellerRequest.findByIdAndDelete(id);
+        await SellerRequest.findByIdAndDelete(sellerId);
 
         res.json({ message: "Seller request approved and seller created successfully" });
     } catch (error) {
@@ -77,23 +78,24 @@ async function approveSellerRequest(req, res)  {
 
 // Reject seller request
 async function rejectSellerRequest(req, res) {
-    const { id } = req.params;
-    console.log(id);
+    const { sellerId } = req.params; // Extract sellerId from params
+    console.log(sellerId);
 
     try {
-        const request = await SellerRequest.findById(id);
+        const request = await SellerRequest.findById(sellerId);
 
         if (!request) {
             return res.status(404).json({ message: "Seller request not found." });
         }
 
-        await SellerRequest.findByIdAndDelete(id);
+        await SellerRequest.findByIdAndDelete(sellerId);
         res.status(200).json({ message: "Seller request rejected successfully." });
     } catch (error) {
         console.error("Error rejecting seller request:", error);
         res.status(500).json({ message: "Server error", error });
     }
 }
+
 
 
 

@@ -22,6 +22,16 @@ const SellerDetails = () => {
     fetchSellers();
   }, []);
 
+  const deleteSeller = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3020/deleteseller/${id}`);
+      setSellers((prevSellers) => prevSellers.filter((seller) => seller._id !== id));
+    } catch (err) {
+      console.error("Error deleting seller:", err.message);
+      alert("Failed to delete seller. Please try again.");
+    }
+  };
+
   return (
     <div className="seller-details-container">
       <h2>Seller Details</h2>
@@ -30,9 +40,9 @@ const SellerDetails = () => {
       ) : error ? (
         <p className="error-message">Error: {error}</p>
       ) : sellers.length > 0 ? (
-        <div className="sellers-list" style={{display:"flex", flexDirection:"column",marginLeft:"500px"}}>
-          {sellers.map((seller, index) => (
-            <div key={index} className="seller-card" style={{width:"60%"}}>
+        <div className="sellers-list" style={{ display: "flex", flexDirection: "column", marginLeft: "500px" }}>
+          {sellers.map((seller) => (
+            <div key={seller._id} className="seller-card" style={{ width: "60%" }}>
               <p>
                 <strong>Name:</strong> {seller.username}
               </p>
@@ -42,6 +52,13 @@ const SellerDetails = () => {
               <p>
                 <strong>Shop:</strong> {seller.shopname}
               </p>
+              <button
+                onClick={() => deleteSeller(seller._id)}
+                className="delete-button"
+                style={{ backgroundColor: "red", color: "white", padding: "5px 10px", border: "none", borderRadius: "5px", cursor: "pointer" }}
+              >
+                Delete
+              </button>
             </div>
           ))}
         </div>

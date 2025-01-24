@@ -12,6 +12,7 @@
   box-sizing: border-box;
   overflow: hidden; /* Prevent scrollbars caused by white space */
   width: 100%;
+  margin-left: 150px;
 }
 
 /* Title styling */

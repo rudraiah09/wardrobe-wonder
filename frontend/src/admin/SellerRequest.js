@@ -21,8 +21,8 @@ function SellerRequests1() {
     const handleApprove = async (sellerId) => {
         try {
             await axios.post(`http://localhost:3020/sellerRequests/approve`, { sellerId });
-            setSellerRequests((prev) =>
-                prev.filter((request) => request.id !== sellerId)
+            setSellerRequests((prevRequests) =>
+                prevRequests.filter((request) => request._id !== sellerId)
             );
             alert('Seller request approved!');
         } catch (error) {
@@ -33,9 +33,9 @@ function SellerRequests1() {
 
     const handleReject = async (sellerId) => {
         try {
-            await axios.post(`http://localhost:3020/sellerRequests/reject`, { sellerId });
-            setSellerRequests((prev) =>
-                prev.filter((request) => request.id !== sellerId)
+            await axios.delete(`http://localhost:3020/sellerRequests/reject/${sellerId}`);
+            setSellerRequests((prevRequests) =>
+                prevRequests.filter((request) => request._id !== sellerId)
             );
             alert('Seller request rejected!');
         } catch (error) {
@@ -48,31 +48,39 @@ function SellerRequests1() {
         <div className="seller-requests-container">
             <div className="seller-requests">
                 <h1>Seller Requests</h1>
-                <table>
-                    <thead>
-                        <tr>
-                           
-                            <th>Name</th>
-                            <th>Shop Name</th>
-                            <th>Email</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                {sellerRequests.length > 0 ? (
+                    <div className="sellers-list">
                         {sellerRequests.map((request) => (
-                            <tr key={request.id}>
-                                
-                                <td>{request.username}</td>
-                                <td>{request.shopname}</td>
-                                <td>{request.email}</td>
-                                <td>
-                                    <button onClick={() => handleApprove(request.id)}>Approve</button>
-                                    <button onClick={() => handleReject(request.id)}>Reject</button>
-                                </td>
-                            </tr>
+                            <div key={request._id} className="seller-request-card">
+                                <p>
+                                    <strong>Name:</strong> {request.username}
+                                </p>
+                                <p>
+                                    <strong>Shop Name:</strong> {request.shopname}
+                                </p>
+                                <p>
+                                    <strong>Email:</strong> {request.email}
+                                </p>
+                                <div>
+                                    <button
+                                        onClick={() => handleApprove(request._id)}
+                                        className="approve-button"
+                                    >
+                                        Approve
+                                    </button>
+                                    <button
+                                        onClick={() => handleReject(request._id)}
+                                        className="reject-button"
+                                    >
+                                        Reject
+                                    </button>
+                                </div>
+                            </div>
                         ))}
-                    </tbody>
-                </table>
+                    </div>
+                ) : (
+                    <p className="empty-message">No seller requests found.</p>
+                )}
             </div>
         </div>
     );

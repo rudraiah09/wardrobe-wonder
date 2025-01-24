@@ -23,9 +23,8 @@ function AdminLogin() {
 
       // Navigate to admin dashboard after successful login
 
-      navigate("/admindashboard");
+      navigate("/admin/dashboard");
 
-      navigate("/adminhome");
 
     } catch (error) {
       if (error.response && error.response.data.message) {
