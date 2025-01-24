@@ -23,20 +23,39 @@ header {
   z-index: 1000; /* Ensure header stays on top of the sidebar and content */
 }
 
-/* Wrapper for Sidebar and Profile Content */
-.profile-wrapper {
-  display: flex;
-  flex-grow: 1;
-  overflow: auto; /* Allow scrolling */
-  position: relative; /* Required for moving sidebar and content together */
-  width: 100%;
-  margin-top: 60px; /* Offset the wrapper below the fixed header */
+.profile-pic-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 85px;
+  cursor: pointer;
+}
+
+
+.edit-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  top: 40px;
+  width: 90%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 5px 0;
+  border-radius: 0 0 40% 40%;
+  display: none;
+}
+
+.profile-pic-wrapper:hover .edit-overlay {
+  display: block;
 }
 
 /* Sidebar */
 .sidebar {
   background-color: #222831; /* Sidebar background */
   width: 300px;
+  min-width: 250px;
+  max-width: 100%;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -47,27 +66,45 @@ header {
   z-index: 800; /* Ensure sidebar stays below the header */
   overflow: hidden; /* Remove sidebar scrollbar */
   margin-top: 40px;
+  justify-content: space-between; /* Spread items vertically */
 }
 
-/* Sidebar Header */
 .sidebar-header {
-  text-align: center;
+  display: flex; /* Use flexbox for horizontal alignment */
+  align-items: center; /* Vertically align items */
   margin-bottom: 20px;
 }
 
 .sidebar-header .profile-pic {
-  width: 100px;
-  height: 100px;
+  width: 100px; /* Adjust width for the profile pic */
+  height: 100px; /* Adjust height for the profile pic */
   border-radius: 50%; /* Circular shape */
   object-fit: cover;
+  margin-right: 20px;
   border: 2px solid #FFD369; /* Highlight border */
 }
 
-.sidebar-header p {
-  color: #FFD369; /* Highlight color */
-  margin-top: 10px;
-  font-weight: bold;
+.sidebar-header .text {
+  display: flex; /* Stack text vertically */
+  flex-direction: column;
+  line-height: 1.2; /* Adjust line height for better spacing */
+  padding-left: 20px;
+  padding-top: 20px;
 }
+
+.sidebar-header .text .hello {
+  font-size: 1.5rem; /* Adjust font size for "Hello," */
+  color: #FFD369; /* Highlight color for "Hello," */
+  margin: 0;
+}
+
+.sidebar-header .text .user {
+  font-size: 2rem; /* Larger font size for "User" */
+  font-weight: bold; /* Bold "User" for emphasis */
+  color: #FFD369; /* Light text color */
+  margin: 0;
+}
+
 
 /* Sidebar Menu */
 .sidebar-menu ul {
@@ -83,15 +120,27 @@ header {
   transition: background-color 0.3s, color 0.3s;
 }
 
-.sidebar-menu li:hover,
-.sidebar-menu li.active {
-  background-color: #FFD369; /* Highlight background */
-  color: #222831; /* Dark text */
+.sidebar-btn{
+  background-color: #FFD369; /* Button background */
+  border: none;
+  margin-top: auto; /* Stick to the bottom */
+  padding: 10px 20px;
+  border-radius: 5px;
+  width: 100%;
+  cursor: pointer;
+  color: #222831; /* Dark button text */
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+}
+.sidebar-btn:hover{
+  background-color: #f8b414;
+  color: #222831;
 }
 
 .logout-btn {
   background-color: #FFD369; /* Button background */
   border: none;
+  margin-top: auto; /* Stick to the bottom */
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
@@ -101,8 +150,8 @@ header {
 }
 
 .logout-btn:hover {
-  background-color: #393E46; /* Dark hover background */
-  color: #FFD369; /* Highlight hover text */
+  background-color: #f8b414;
+  color: #222831;
 }
 
 /* Main Content */
@@ -169,33 +218,80 @@ header {
   margin-top: 20px;
 }
 
-.deactivate-btn,
-.delete-btn {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
+.editable-field,
+.email-field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.editable-field label,
+.email-field label {
   font-weight: bold;
+  margin-right: 10px;
+}
+
+.editable-field .view-section span,
+.email-field span {
+  margin-right: 15px;
+}
+
+.edit-section {
+  display: flex;
+  gap: 10px;
+}
+
+.name-input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.edit-btn,
+.save-btn,
+.cancel-btn {
+  background-color: #f4d07b;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
 }
 
-.deactivate-btn {
-  background-color: #FFD369; /* Button background */
-  color: #222831; /* Dark text */
+.edit-btn:hover,
+.save-btn:hover,
+.cancel-btn:hover {
+  background-color: #fdb50e;
 }
 
-.deactivate-btn:hover {
-  background-color: #393E46; /* Dark hover background */
-  color: #FFD369; /* Highlight hover text */
+/* Responsive Sidebar */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px; /* Collapsed sidebar for smaller screens */
+    overflow: hidden;
+  }
+
+  .sidebar-menu li {
+    text-align: center; /* Center text in collapsed view */
+    font-size: 14px;
+  }
+
+  .sidebar-menu li span {
+    display: none; /* Hide text, show icons only */
+  }
+
+  .sidebar:hover {
+    width: 300px; /* Expand on hover */
+  }
+
+  .sidebar:hover .sidebar-menu li span {
+    display: inline; /* Show text when expanded */
+  }
 }
 
-.delete-btn {
-  background-color: #FF5C5C; /* Delete button background (Red) */
-  color: #FFFFFF; /* White text */
-}
-
-.delete-btn:hover {
-  background-color: #FF1E1E; /* Hover Red */
-  color: #EEEEEE; /* Light text */
+/* Focus Styles for Accessibility */
+.sidebar-menu li:focus,
+.logout-btn:focus {
+  outline: 2px dashed #FFD369; /* Highlight element on focus */
+  outline-offset: 3px; /* Add space around the outline */
 }

@@ -12,6 +12,9 @@ const buyerSchema =  new mongoose.Schema({
         type:String,
         required:true
     },
+    profilePic:{ 
+        type: String, default: '/default-profile-pic.jpg' 
+    },
     cart: [
         {
             productId:{type:String, required:true},

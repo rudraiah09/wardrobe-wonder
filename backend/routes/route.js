@@ -1,15 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const {handleloginseller } = require('../controllers/sellercontroller')
-const {handleLoginAdmin,fetchsellers} = require('../controllers/admincontroller')
-const {postsignuppage ,postloginpage} = require('../controllers/buyerloginsignup');
+const {fetchsellers} = require('../controllers/admincontroller')
+
 const sellerRequestController =require('../controllers/sellerRequestController')
 
 const multer = require('multer');
 const path = require('path')
 const {handleloginseller ,handleaddproduct,fetchproducts } = require('../controllers/sellercontroller')
-const {postsignuppage ,postloginpage,gethome,getAllProducts,buyerProfile,buyerlogout,getWishlist,addToWishlist,modifyWishlist, addToCart, getCart} = require('../controllers/buyerloginsignup')
+const {postsignuppage ,postloginpage,gethome,getAllProducts,buyerProfile,buyerlogout,getWishlist,addToWishlist,modifyWishlist, addToCart, getCart, addProfilePic,updateName} = require('../controllers/buyerloginsignup')
 const {handleLoginAdmin} = require('../controllers/admincontroller');
 
 
@@ -48,6 +47,10 @@ router.post('/buyerhome1', addToWishlist);
 // Route for removing an item from the wishlist (DELETE request)
 router.delete('/buyerwishlist/:itemId', modifyWishlist);
 router.post('/buyerhome2', addToCart);
+
+
+router.post('/uploadProfilePic', upload.single('profilePic'),addProfilePic);
+router.post('/updateName',updateName);
 
 //seller Request Routes
 

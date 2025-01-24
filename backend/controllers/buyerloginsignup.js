@@ -139,7 +139,8 @@ async function buyerProfile(req, res) {
         }
 
         // Return user details
-        return res.status(200).json({ name: user.name, email: user.email });
+        return res.status(200).json({ name: user.name, email: user.email ,profilePic:user.profilePic});
+        console.log(user.profilePic);
     } catch (error) {
         console.error("Error in buyerProfile:", error);
         return res.status(401).json({ message: "Session expired, please login" });
@@ -382,6 +383,68 @@ const getCart = async (req, res) => {
   }
 };
 
+const addProfilePic = async (req, res) => {
+  try {
+    // Verify and decode the buyer authentication token
+    const token = req.cookies.buyerauthToken;
+
+    if (!token) {
+        return res.status(401).json({ message: 'Unauthorized: No authentication token provided.' });
+    }
+
+    const decoded = jwt.verify(token, secretkey); // Replace 'secretkey' with your actual secret key
+    const buyerId = decoded.id; // Extract the buyer ID from the token payload
+    const profilePicUrl = `/uploads/${req.file.filename}`; // Construct the path
+
+    // Update the buyer profile in the database
+    const updatedBuyer = await buyer.findByIdAndUpdate(
+      buyerId,
+      { profilePic: profilePicUrl },
+      { new: true } // Return the updated document
+    );
+
+    res.status(200).json({ profilePic: updatedBuyer.profilePic });
+  } catch (error) {
+    console.error('Error uploading profile picture:', error);
+    res.status(500).json({ message: 'Failed to upload profile picture' });
+  }
+};
+
+const updateName = async (req, res) => {
+
+   // Verify and decode the buyer authentication token
+  const token = req.cookies.buyerauthToken;
+
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized: No authentication token provided.' });
+  }
+
+  const decoded = jwt.verify(token, secretkey); // Replace 'secretkey' with your actual secret key
+  const buyerId = decoded.id; // Extract the buyer ID from the token payload
+  const { name } = req.body;
+
+  if (!name || name.trim() === '') {
+    return res.status(400).json({ message: 'Name cannot be empty' });
+  }
+
+  try {
+    const user = await buyer.findByIdAndUpdate(
+      buyerId,
+      { name: name.trim() },
+      { new: true } // Return the updated user document
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ message: 'Name updated successfully', name: user.name });
+  } catch (error) {
+    console.error('Error updating name:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 module.exports = {
     postsignuppage,
     postloginpage,
@@ -394,4 +457,6 @@ module.exports = {
     modifyWishlist,
     addToCart,
     getCart,
+    addProfilePic,
+    updateName,
 };

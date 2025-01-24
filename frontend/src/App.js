@@ -38,17 +38,7 @@ function App() {
             <Route path="/sellerRequest-Form" element={<SellerRequestForm></SellerRequestForm>}></Route>
             <Route path="/seller-login" element={<Login></Login>}></Route>
             <Route path="/sellerhome" element={<div style={{display:'flex'}}><SellerNavbar></SellerNavbar><SellerDashboard></SellerDashboard></div>}></Route>
-            <Route
-  path="/seller/products"
-  element={
-    <div style={{ display: 'flex', overflow: 'hidden', height: '100vh' }}>
-      <SellerNavbar />
-      
-        <ProductList />
-      </div>
-    
-  }
-/>
+            <Route path="/seller/products" element={<div style={{ display: 'flex', overflow: 'hidden', height: '100vh' }}><SellerNavbar /> <ProductList /> </div> } />
            
             <Route path="/seller/settings" element={<><SellerNavbar></SellerNavbar></>}></Route>
             <Route path="/seller/orders" element={<><SellerNavbar></SellerNavbar></>}></Route>
